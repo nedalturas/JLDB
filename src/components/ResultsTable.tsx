@@ -99,7 +99,7 @@ function ResultsTable() {
         >
           {selectedRow ? (
             <div>
-              <Text mb="sm"><strong>Company Name:</strong> {selectedRow['Company name']}</Text>
+              <Text mb="sm"><strong>Company Name:</strong> {selectedRow['Company Name']}</Text>
               <Text mb="sm"><strong>City Coverage:</strong> {selectedRow['City Coverage']}</Text>
               <Text mb="sm"><strong>Service Type:</strong> {selectedRow['Service Type']}</Text>
               
