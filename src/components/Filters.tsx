@@ -15,27 +15,62 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
   const [service, setService] = useState('');
   const [search, setSearch] = useState('');
 
-  // Extract unique cities and services from the actual data
+  // Extract unique cities dynamically from sheet columns
   const getUniqueCities = () => {
     const citySet = new Set<string>();
-    data.forEach(row => {
-      if (row['Dubai'] === 'TRUE' || row['Dubai'] === true) citySet.add('Dubai');
-      if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true) citySet.add('Abu Dhabi');
-      if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true) citySet.add('Sharjah');
-      if (row['Ajman'] === 'TRUE' || row['Ajman'] === true) citySet.add('Ajman');
-      if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true) citySet.add('Al Ain');
-    });
-    return Array.from(citySet).sort().map(city => ({ value: city.toLowerCase(), label: city }));
+
+    if (data.length > 0) {
+      // Get all column names from the first row
+      const columns = Object.keys(data[0]);
+
+      // Find city columns (excluding non-city columns)
+      const cityColumns = columns.filter(col =>
+        col !== 'Company Name' &&
+        col !== 'Service Type' &&
+        col !== 'Status' &&
+        col !== 'Whatsapp' &&
+        !col.startsWith('Column') // Exclude generic column names
+      );
+
+      data.forEach(row => {
+        cityColumns.forEach(cityCol => {
+          if (row[cityCol] === 'TRUE' || row[cityCol] === true || row[cityCol] === '1') {
+            citySet.add(cityCol);
+          }
+        });
+      });
+    }
+
+    const cityOptions = Array.from(citySet).sort().map(city => ({
+      value: city.toLowerCase().replace(/\s+/g, '-'), // Normalize spaces to hyphens for value
+      label: city
+    }));
+
+    // Add "All Cities" option at the beginning
+    return [{ value: '', label: 'All Cities' }, ...cityOptions];
   };
 
+  // Extract and split services by comma
   const getUniqueServices = () => {
     const serviceSet = new Set<string>();
     data.forEach(row => {
       if (row['Service Type'] && row['Service Type'] !== 'N/A') {
-        serviceSet.add(row['Service Type']);
+        // Split by comma and trim whitespace
+        const services = row['Service Type'].split(',').map((s: string) => s.trim());
+        services.forEach((service: string) => {
+          if (service) {
+            serviceSet.add(service);
+          }
+        });
       }
     });
-    return Array.from(serviceSet).sort().map(service => ({ value: service.toLowerCase(), label: service }));
+    const serviceOptions = Array.from(serviceSet).sort().map(service => ({
+      value: service.toLowerCase(),
+      label: service
+    }));
+
+    // Add "All Services" option at the beginning
+    return [{ value: '', label: 'All Services' }, ...serviceOptions];
   };
 
   const cities = getUniqueCities();
@@ -80,3 +115,4 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
 }
 
 export default Filters;
+
