@@ -105,7 +105,7 @@ function ResultsTable() {
               
               {/* Display any additional fields from the sheet */}
               {Object.entries(selectedRow).map(([key, value]) => {
-                if (!['Company name', 'City Coverage', 'Service Type'].includes(key)) {
+                if (!['Company Name', 'City Coverage', 'Service Type'].includes(key)) {
                   return (
                     <Text key={key} mb="sm">
                       <strong>{key}:</strong> {value}
