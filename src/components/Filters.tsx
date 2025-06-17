@@ -2,6 +2,7 @@ import { TextInput, Select, Group, Container } from '@mantine/core';
 import { useState, useEffect } from 'react';
 
 interface FilterProps {
+  data?: any[];
   onFilterChange?: (filters: {
     city: string;
     service: string;
@@ -9,30 +10,36 @@ interface FilterProps {
   }) => void;
 }
 
-function Filters({ onFilterChange }: FilterProps) {
+function Filters({ data = [], onFilterChange }: FilterProps) {
   const [city, setCity] = useState('');
   const [service, setService] = useState('');
   const [search, setSearch] = useState('');
 
-  const cities = [
-    { value: 'dubai', label: 'Dubai' },
-    { value: 'abu dhabi', label: 'Abu Dhabi' },
-    { value: 'sharjah', label: 'Sharjah' },
-    { value: 'ajman', label: 'Ajman' },
-    { value: 'al ain', label: 'Al Ain' },
-  ];
+  // Extract unique cities and services from the actual data
+  const getUniqueCities = () => {
+    const citySet = new Set<string>();
+    data.forEach(row => {
+      if (row['Dubai'] === 'TRUE' || row['Dubai'] === true) citySet.add('Dubai');
+      if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true) citySet.add('Abu Dhabi');
+      if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true) citySet.add('Sharjah');
+      if (row['Ajman'] === 'TRUE' || row['Ajman'] === true) citySet.add('Ajman');
+      if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true) citySet.add('Al Ain');
+    });
+    return Array.from(citySet).sort().map(city => ({ value: city.toLowerCase(), label: city }));
+  };
 
-  const services = [
-    { value: 'home cleaning', label: 'Home Cleaning' },
-    { value: 'carwash', label: 'Carwash' },
-    { value: 'cleaning', label: 'Cleaning' },
-    { value: 'plumbing', label: 'Plumbing' },
-    { value: 'electrical', label: 'Electrical' },
-    { value: 'maintenance', label: 'Maintenance' },
-    { value: 'hvac', label: 'HVAC' },
-    { value: 'painting', label: 'Painting' },
-    { value: 'carpentry', label: 'Carpentry' },
-  ];
+  const getUniqueServices = () => {
+    const serviceSet = new Set<string>();
+    data.forEach(row => {
+      if (row['Service Type'] && row['Service Type'] !== 'N/A') {
+        serviceSet.add(row['Service Type']);
+      }
+    });
+    return Array.from(serviceSet).sort().map(service => ({ value: service.toLowerCase(), label: service }));
+  };
+
+  const cities = getUniqueCities();
+  const services = getUniqueServices();
 
   useEffect(() => {
     if (onFilterChange) {

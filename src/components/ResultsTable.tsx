@@ -28,9 +28,10 @@ interface ResultsTableProps {
     service: string;
     search: string;
   };
+  onDataLoad?: (data: SheetData[]) => void;
 }
 
-function ResultsTable({ filters }: ResultsTableProps) {
+function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   const [opened, setOpened] = useState(false);
   const [selectedRow, setSelectedRow] = useState<FilteredData | null>(null);
   const [data, setData] = useState<SheetData[]>([]);
@@ -57,6 +58,11 @@ function ResultsTable({ filters }: ResultsTableProps) {
         
         const sheetData = await response.json();
         setData(sheetData);
+        
+        // Pass data to parent component for filter options
+        if (onDataLoad) {
+          onDataLoad(sheetData);
+        }
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch data');
@@ -66,7 +72,7 @@ function ResultsTable({ filters }: ResultsTableProps) {
     };
 
     fetchData();
-  }, []);
+  }, [onDataLoad]);
 
   // Process and filter data
   useEffect(() => {

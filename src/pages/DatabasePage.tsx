@@ -8,6 +8,7 @@ function DatabasePage() {
     service: '',
     search: ''
   });
+  const [sheetData, setSheetData] = useState([]);
 
   const handleFilterChange = useCallback((newFilters: {
     city: string;
@@ -17,10 +18,14 @@ function DatabasePage() {
     setFilters(newFilters);
   }, []);
 
+  const handleDataLoad = useCallback((data: any[]) => {
+    setSheetData(data);
+  }, []);
+
   return (
     <>
-      <Filters onFilterChange={handleFilterChange} />
-      <ResultsTable filters={filters} />
+      <Filters data={sheetData} onFilterChange={handleFilterChange} />
+      <ResultsTable filters={filters} onDataLoad={handleDataLoad} />
     </>
   );
 }
