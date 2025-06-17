@@ -42,7 +42,7 @@ export function HeaderSimple() {
       <header className={classes.header}>
         <Container size="md" className={classes.inner}>
           <Link to="/" className={classes.logo}>
-            <Text fw={700} size="lg">JLDB</Text>
+            <Text fw={700} size="lg" component="span">JLDB</Text>
           </Link>
           <Group gap={5} visibleFrom="xs">
             {items}
@@ -57,7 +57,7 @@ export function HeaderSimple() {
         onClose={close}
         title={
           <Link to="/" className={classes.logo} onClick={close}>
-            <Text fw={700} size="lg">JLDB</Text>
+            <Text fw={700} size="lg" component="span">JLDB</Text>
           </Link>
         }
         hiddenFrom="xs"
