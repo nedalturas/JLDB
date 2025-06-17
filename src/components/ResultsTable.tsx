@@ -278,7 +278,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                     </Badge>
                   </Table.Td>
                   <Table.Td>
-                    <Group gap="xs">
+                    <Button.Group>
                       <Button size="xs" onClick={() => handleView(row)}>
                         View
                       </Button>
@@ -291,7 +291,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                       >
                         Chat
                       </Button>
-                    </Group>
+                    </Button.Group>
                   </Table.Td>
                 </Table.Tr>
               ))}
