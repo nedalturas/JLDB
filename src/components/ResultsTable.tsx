@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Table, ScrollArea, Group, Text, Container, Button, Modal, Badge, Loader, Alert } from '@mantine/core';
 
 interface SheetData {
-  'Company name': string;
+  'Company Name': string;
   'City Coverage': string;
   'Service Type': string;
   [key: string]: any; // For any additional columns
