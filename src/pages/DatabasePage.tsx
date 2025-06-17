@@ -20,7 +20,7 @@ function DatabasePage() {
   return (
     <>
       <Filters onFilterChange={handleFilterChange} />
-      <ResultsTable />
+      <ResultsTable filters={filters} />
     </>
   );
 }

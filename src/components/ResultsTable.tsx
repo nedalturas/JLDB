@@ -3,15 +3,38 @@ import { Table, ScrollArea, Group, Text, Container, Button, Modal, Badge, Loader
 
 interface SheetData {
   'Company Name': string;
-  'City Coverage': string;
+  'Dubai': string;
+  'Abu Dhabi': string;
+  'Sharjah': string;
+  'Ajman': string;
+  'Al Ain': string;
   'Service Type': string;
-  [key: string]: any; // For any additional columns
+  'Status': string;
+  'Whatsapp': string;
+  [key: string]: any;
 }
 
-function ResultsTable() {
+interface FilteredData {
+  companyName: string;
+  citysCoverage: string[];
+  serviceType: string;
+  status: string;
+  whatsapp: string;
+}
+
+interface ResultsTableProps {
+  filters?: {
+    city: string;
+    service: string;
+    search: string;
+  };
+}
+
+function ResultsTable({ filters }: ResultsTableProps) {
   const [opened, setOpened] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<SheetData | null>(null);
+  const [selectedRow, setSelectedRow] = useState<FilteredData | null>(null);
   const [data, setData] = useState<SheetData[]>([]);
+  const [filteredData, setFilteredData] = useState<FilteredData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,15 +68,71 @@ function ResultsTable() {
     fetchData();
   }, []);
 
-  const handleView = (row: SheetData) => {
+  // Process and filter data
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      setFilteredData([]);
+      return;
+    }
+
+    const processedData: FilteredData[] = data.map(row => {
+      // Get cities where the company operates (where checkbox is checked)
+      const cities = [];
+      if (row['Dubai'] === 'TRUE' || row['Dubai'] === true) cities.push('Dubai');
+      if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true) cities.push('Abu Dhabi');
+      if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true) cities.push('Sharjah');
+      if (row['Ajman'] === 'TRUE' || row['Ajman'] === true) cities.push('Ajman');
+      if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true) cities.push('Al Ain');
+
+      return {
+        companyName: row['Company Name'] || 'N/A',
+        citysCoverage: cities,
+        serviceType: row['Service Type'] || 'N/A',
+        status: row['Status'] || 'Active',
+        whatsapp: row['Whatsapp'] || ''
+      };
+    });
+
+    // Apply filters
+    let filtered = processedData;
+
+    if (filters) {
+      if (filters.city) {
+        filtered = filtered.filter(item => 
+          item.citysCoverage.some(city => 
+            city.toLowerCase().includes(filters.city.toLowerCase())
+          )
+        );
+      }
+
+      if (filters.service) {
+        filtered = filtered.filter(item => 
+          item.serviceType.toLowerCase().includes(filters.service.toLowerCase())
+        );
+      }
+
+      if (filters.search) {
+        filtered = filtered.filter(item => 
+          item.companyName.toLowerCase().includes(filters.search.toLowerCase())
+        );
+      }
+    }
+
+    setFilteredData(filtered);
+  }, [data, filters]);
+
+  const handleView = (row: FilteredData) => {
     setSelectedRow(row);
     setOpened(true);
   };
 
-  const handleChat = (row: SheetData) => {
-    // Placeholder for chat functionality
-    console.log('Starting chat with:', row['Company name']);
-    // You can implement actual chat functionality here
+  const handleChat = (row: FilteredData) => {
+    if (row.whatsapp) {
+      // Open WhatsApp chat
+      window.open(row.whatsapp, '_blank');
+    } else {
+      console.log('No WhatsApp link available for:', row.companyName);
+    }
   };
 
   if (loading) {
@@ -77,11 +156,13 @@ function ResultsTable() {
     );
   }
 
-  if (!data || data.length === 0) {
+  if (!filteredData || filteredData.length === 0) {
     return (
       <Container>
         <Alert color="yellow" title="No data available">
-          No records found in the sheet.
+          {filters && (filters.city || filters.service || filters.search) 
+            ? 'No records match your current filters.' 
+            : 'No records found in the sheet.'}
         </Alert>
       </Container>
     );
@@ -99,21 +180,21 @@ function ResultsTable() {
         >
           {selectedRow ? (
             <div>
-              <Text mb="sm"><strong>Company Name:</strong> {selectedRow['Company Name']}</Text>
-              <Text mb="sm"><strong>City Coverage:</strong> {selectedRow['City Coverage']}</Text>
-              <Text mb="sm"><strong>Service Type:</strong> {selectedRow['Service Type']}</Text>
-              
-              {/* Display any additional fields from the sheet */}
-              {Object.entries(selectedRow).map(([key, value]) => {
-                if (!['Company Name', 'City Coverage', 'Service Type'].includes(key)) {
-                  return (
-                    <Text key={key} mb="sm">
-                      <strong>{key}:</strong> {value}
-                    </Text>
-                  );
-                }
-                return null;
-              })}
+              <Text mb="sm"><strong>Company Name:</strong> {selectedRow.companyName}</Text>
+              <Text mb="sm"><strong>City Coverage:</strong> {selectedRow.citysCoverage.join(', ')}</Text>
+              <Text mb="sm"><strong>Service Type:</strong> {selectedRow.serviceType}</Text>
+              <Text mb="sm">
+                <strong>Status:</strong>{' '}
+                <Badge 
+                  variant="light" 
+                  color={selectedRow.status.toLowerCase() === 'active' ? 'green' : 'red'}
+                >
+                  {selectedRow.status}
+                </Badge>
+              </Text>
+              {selectedRow.whatsapp && (
+                <Text mb="sm"><strong>WhatsApp:</strong> Available</Text>
+              )}
             </div>
           ) : null}
         </Modal>
@@ -125,15 +206,24 @@ function ResultsTable() {
                 <Table.Th>Company Name</Table.Th>
                 <Table.Th>City Coverage</Table.Th>
                 <Table.Th>Service Type</Table.Th>
+                <Table.Th>Status</Table.Th>
                 <Table.Th>Actions</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {data.map((row, idx) => (
+              {filteredData.map((row, idx) => (
                 <Table.Tr key={idx}>
-                  <Table.Td>{row['Company name'] || 'N/A'}</Table.Td>
-                  <Table.Td>{row['City Coverage'] || 'N/A'}</Table.Td>
-                  <Table.Td>{row['Service Type'] || 'N/A'}</Table.Td>
+                  <Table.Td>{row.companyName}</Table.Td>
+                  <Table.Td>{row.citysCoverage.join(', ') || 'N/A'}</Table.Td>
+                  <Table.Td>{row.serviceType}</Table.Td>
+                  <Table.Td>
+                    <Badge 
+                      variant="light" 
+                      color={row.status.toLowerCase() === 'active' ? 'green' : 'red'}
+                    >
+                      {row.status}
+                    </Badge>
+                  </Table.Td>
                   <Table.Td>
                     <Group gap="xs">
                       <Button size="xs" onClick={() => handleView(row)}>
@@ -144,6 +234,7 @@ function ResultsTable() {
                         variant="outline" 
                         color="blue"
                         onClick={() => handleChat(row)}
+                        disabled={!row.whatsapp}
                       >
                         Chat
                       </Button>

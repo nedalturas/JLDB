@@ -14,18 +14,17 @@ function Filters({ onFilterChange }: FilterProps) {
   const [service, setService] = useState('');
   const [search, setSearch] = useState('');
 
-  // You can expand these lists based on the actual data from your sheet
   const cities = [
     { value: 'dubai', label: 'Dubai' },
-    { value: 'abu_dhabi', label: 'Abu Dhabi' },
+    { value: 'abu dhabi', label: 'Abu Dhabi' },
     { value: 'sharjah', label: 'Sharjah' },
     { value: 'ajman', label: 'Ajman' },
-    { value: 'ras_al_khaimah', label: 'Ras Al Khaimah' },
-    { value: 'fujairah', label: 'Fujairah' },
-    { value: 'umm_al_quwain', label: 'Umm Al Quwain' },
+    { value: 'al ain', label: 'Al Ain' },
   ];
 
   const services = [
+    { value: 'home cleaning', label: 'Home Cleaning' },
+    { value: 'carwash', label: 'Carwash' },
     { value: 'cleaning', label: 'Cleaning' },
     { value: 'plumbing', label: 'Plumbing' },
     { value: 'electrical', label: 'Electrical' },
