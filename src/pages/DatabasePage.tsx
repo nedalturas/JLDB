@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Filters from "../components/Filters";
 import ResultsTable from "../components/ResultsTable";
 
@@ -9,13 +9,13 @@ function DatabasePage() {
     search: ''
   });
 
-  const handleFilterChange = (newFilters: {
+  const handleFilterChange = useCallback((newFilters: {
     city: string;
     service: string;
     search: string;
   }) => {
     setFilters(newFilters);
-  };
+  }, []);
 
   return (
     <>
