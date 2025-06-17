@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react';
-import { Table, ScrollArea, Group, Text, Container, Button, Modal, Badge, Loader, Alert } from '@mantine/core';
+import {
+  Table,
+  ScrollArea,
+  Group,
+  Text,
+  Container,
+  Button,
+  Modal,
+  Badge,
+  Loader,
+  Alert,
+  Pagination,
+  Select,
+} from '@mantine/core';
 
 interface SheetData {
   'Company Name': string;
-  'Dubai': string;
+  Dubai: string;
   'Abu Dhabi': string;
-  'Sharjah': string;
-  'Ajman': string;
+  Sharjah: string;
+  Ajman: string;
   'Al Ain': string;
   'Service Type': string;
-  'Status': string;
-  'Whatsapp': string;
+  Status: string;
+  Whatsapp: string;
   [key: string]: any;
 }
 
@@ -39,6 +52,9 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const SHEET_ID = '1aAOwWOLyUdbT2a3F4IBTHDPnXBlBH240OFtIKom5H9Q';
   const SHEET_NAME = 'Sheet1';
 
@@ -47,19 +63,18 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
       try {
         setLoading(true);
         setError(null);
-        
+
         const response = await fetch(
           `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`
         );
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const sheetData = await response.json();
         setData(sheetData);
-        
-        // Pass data to parent component for filter options
+
         if (onDataLoad) {
           onDataLoad(sheetData);
         }
@@ -74,57 +89,62 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     fetchData();
   }, [onDataLoad]);
 
-  // Process and filter data
   useEffect(() => {
     if (!data || data.length === 0) {
       setFilteredData([]);
       return;
     }
 
-    const processedData: FilteredData[] = data.map(row => {
-      // Get cities where the company operates (where checkbox is checked)
+    const processedData: FilteredData[] = data.map((row) => {
       const cities = [];
-      if (row['Dubai'] === 'TRUE' || row['Dubai'] === true) cities.push('Dubai');
-      if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true) cities.push('Abu Dhabi');
-      if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true) cities.push('Sharjah');
-      if (row['Ajman'] === 'TRUE' || row['Ajman'] === true) cities.push('Ajman');
-      if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true) cities.push('Al Ain');
+      if (row['Dubai'] === 'TRUE' || row['Dubai'] === true)
+        cities.push('Dubai');
+      if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true)
+        cities.push('Abu Dhabi');
+      if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true)
+        cities.push('Sharjah');
+      if (row['Ajman'] === 'TRUE' || row['Ajman'] === true)
+        cities.push('Ajman');
+      if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true)
+        cities.push('Al Ain');
 
       return {
         companyName: row['Company Name'] || 'N/A',
         citysCoverage: cities,
         serviceType: row['Service Type'] || 'N/A',
         status: row['Status'] || 'Active',
-        whatsapp: row['Whatsapp'] || ''
+        whatsapp: row['Whatsapp'] || '',
       };
     });
 
-    // Apply filters
     let filtered = processedData;
 
     if (filters) {
       if (filters.city) {
-        filtered = filtered.filter(item => 
-          item.citysCoverage.some(city => 
-            city.toLowerCase().includes(filters.city.toLowerCase())
-          )
+        filtered = filtered.filter((item) =>
+          item.citysCoverage.some((city) => {
+            const normalizedFilterCity = filters.city.toLowerCase().replace(/-/g, ' ');
+            const normalizedCity = city.toLowerCase();
+            return normalizedCity.includes(normalizedFilterCity);
+          })
         );
       }
 
       if (filters.service) {
-        filtered = filtered.filter(item => 
+        filtered = filtered.filter((item) =>
           item.serviceType.toLowerCase().includes(filters.service.toLowerCase())
         );
       }
 
       if (filters.search) {
-        filtered = filtered.filter(item => 
+        filtered = filtered.filter((item) =>
           item.companyName.toLowerCase().includes(filters.search.toLowerCase())
         );
       }
     }
 
     setFilteredData(filtered);
+    setCurrentPage(1); // reset to first page when filter changes
   }, [data, filters]);
 
   const handleView = (row: FilteredData) => {
@@ -134,12 +154,16 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
 
   const handleChat = (row: FilteredData) => {
     if (row.whatsapp) {
-      // Open WhatsApp chat
       window.open(row.whatsapp, '_blank');
     } else {
       console.log('No WhatsApp link available for:', row.companyName);
     }
   };
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const pageData = filteredData.slice(startIndex, endIndex);
 
   if (loading) {
     return (
@@ -166,8 +190,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     return (
       <Container>
         <Alert color="yellow" title="No data available">
-          {filters && (filters.city || filters.service || filters.search) 
-            ? 'No records match your current filters.' 
+          {filters && (filters.city || filters.service || filters.search)
+            ? 'No records match your current filters.'
             : 'No records found in the sheet.'}
         </Alert>
       </Container>
@@ -184,29 +208,52 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           centered
           size="md"
         >
-          {selectedRow ? (
+          {selectedRow && (
             <div>
-              <Text mb="sm"><strong>Company Name:</strong> {selectedRow.companyName}</Text>
-              <Text mb="sm"><strong>City Coverage:</strong> {selectedRow.citysCoverage.join(', ')}</Text>
-              <Text mb="sm"><strong>Service Type:</strong> {selectedRow.serviceType}</Text>
+              <Text mb="sm">
+                <strong>Company Name:</strong> {selectedRow.companyName}
+              </Text>
+              <Text mb="sm">
+                <strong>City Coverage:</strong> {selectedRow.citysCoverage.join(', ')}
+              </Text>
+              <Text mb="sm">
+                <strong>Service Type:</strong> {selectedRow.serviceType}
+              </Text>
               <Text mb="sm">
                 <strong>Status:</strong>{' '}
-                <Badge 
-                  variant="light" 
+                <Badge
+                  variant="light"
                   color={selectedRow.status.toLowerCase() === 'active' ? 'green' : 'red'}
                 >
                   {selectedRow.status}
                 </Badge>
               </Text>
               {selectedRow.whatsapp && (
-                <Text mb="sm"><strong>WhatsApp:</strong> Available</Text>
+                <Text mb="sm">
+                  <strong>WhatsApp:</strong> Available
+                </Text>
               )}
             </div>
-          ) : null}
+          )}
         </Modal>
 
+        <Group justify="space-between" mb="md">
+          <Select
+            label="Rows per page"
+            data={['5', '10', '25', '50', '100']}
+            value={rowsPerPage.toString()}
+            onChange={(value) => setRowsPerPage(Number(value))}
+            w={150}
+          />
+          <Pagination
+            value={currentPage}
+            onChange={setCurrentPage}
+            total={totalPages}
+          />
+        </Group>
+
         <ScrollArea>
-          <Table striped highlightOnHover withTableBorder>
+          <Table striped highlightOnHover withTableBorder stickyHeader>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Company Name</Table.Th>
@@ -217,14 +264,14 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {filteredData.map((row, idx) => (
-                <Table.Tr key={idx}>
+              {pageData.map((row, idx) => (
+                <Table.Tr key={idx + startIndex}>
                   <Table.Td>{row.companyName}</Table.Td>
                   <Table.Td>{row.citysCoverage.join(', ') || 'N/A'}</Table.Td>
                   <Table.Td>{row.serviceType}</Table.Td>
                   <Table.Td>
-                    <Badge 
-                      variant="light" 
+                    <Badge
+                      variant="light"
                       color={row.status.toLowerCase() === 'active' ? 'green' : 'red'}
                     >
                       {row.status}
@@ -235,9 +282,9 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                       <Button size="xs" onClick={() => handleView(row)}>
                         View
                       </Button>
-                      <Button 
-                        size="xs" 
-                        variant="outline" 
+                      <Button
+                        size="xs"
+                        variant="outline"
                         color="blue"
                         onClick={() => handleChat(row)}
                         disabled={!row.whatsapp}
@@ -251,9 +298,19 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
             </Table.Tbody>
           </Table>
         </ScrollArea>
+
+        <Group justify="center" mt="md">
+          <Pagination
+            value={currentPage}
+            onChange={setCurrentPage}
+            total={totalPages}
+          />
+        </Group>
       </Container>
     </>
   );
 }
 
 export default ResultsTable;
+
+
