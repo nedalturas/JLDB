@@ -1,22 +1,34 @@
-import { useState } from 'react';
-import { Stack, NavLink, Paper, Select } from '@mantine/core';
+import { Stack, NavLink, Paper, Select, Badge } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import { useMarkdownDocs } from '../hooks/useMarkdownDocs';
 import classes from './DocsSidebar.module.css';
 
-export interface DocSection {
-  id: string;
-  title: string;
-  icon?: string;
-}
-
 interface DocsSidebarProps {
-  sections: DocSection[];
   activeSection: string;
   onSectionChange: (sectionId: string) => void;
 }
 
-export function DocsSidebar({ sections, activeSection, onSectionChange }: DocsSidebarProps) {
+export function DocsSidebar({ activeSection, onSectionChange }: DocsSidebarProps) {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const { articles, loading } = useMarkdownDocs();
+
+  // Group articles by category
+  const groupedArticles = articles.reduce((acc, article) => {
+    const category = article.category || 'General';
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(article);
+    return acc;
+  }, {} as Record<string, typeof articles>);
+
+  if (loading) {
+    return (
+      <Paper shadow="sm" p="md" radius="md" className={classes.sidebar}>
+        <div>Loading menu...</div>
+      </Paper>
+    );
+  }
 
   if (isMobile) {
     return (
@@ -24,9 +36,9 @@ export function DocsSidebar({ sections, activeSection, onSectionChange }: DocsSi
         <Select
           label="Navigate to section"
           placeholder="Choose a documentation section"
-          data={sections.map(section => ({
-            value: section.id,
-            label: section.title
+          data={articles.map(article => ({
+            value: article.id,
+            label: article.title
           }))}
           value={activeSection}
           onChange={(value) => value && onSectionChange(value)}
@@ -38,15 +50,26 @@ export function DocsSidebar({ sections, activeSection, onSectionChange }: DocsSi
 
   return (
     <Paper shadow="sm" p="md" radius="md" className={classes.sidebar}>
-      <Stack gap="xs">
-        {sections.map((section) => (
-          <NavLink
-            key={section.id}
-            label={section.title}
-            active={activeSection === section.id}
-            onClick={() => onSectionChange(section.id)}
-            className={classes.navLink}
-          />
+      <Stack gap="md">
+        {Object.entries(groupedArticles).map(([category, categoryArticles]) => (
+          <div key={category}>
+            {Object.keys(groupedArticles).length > 1 && (
+              <Badge variant="light" size="sm" mb="xs">
+                {category}
+              </Badge>
+            )}
+            <Stack gap="xs">
+              {categoryArticles.map((article) => (
+                <NavLink
+                  key={article.id}
+                  label={article.title}
+                  active={activeSection === article.id}
+                  onClick={() => onSectionChange(article.id)}
+                  className={classes.navLink}
+                />
+              ))}
+            </Stack>
+          </div>
         ))}
       </Stack>
     </Paper>

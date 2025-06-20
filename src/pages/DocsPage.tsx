@@ -1,26 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Grid, Container } from '@mantine/core';
-import { DocsSidebar, DocSection } from '../components/DocsSidebar';
+import { DocsSidebar } from '../components/DocsSidebar';
 import { DocsContent } from '../components/DocsContent';
-
-const docSections: DocSection[] = [
-  { id: 'getting-started', title: 'Getting Started' },
-  { id: 'search-filters', title: 'Search & Filters' },
-  { id: 'provider-details', title: 'Provider Details' },
-  { id: 'api-reference', title: 'API Reference' },
-  { id: 'troubleshooting', title: 'Troubleshooting' },
-  { id: 'support', title: 'Support & Contact' },
-];
+import { useMarkdownDocs } from '../hooks/useMarkdownDocs';
 
 function DocsPage() {
-  const [activeSection, setActiveSection] = useState('getting-started');
+  const { articles, loading } = useMarkdownDocs();
+  const [activeSection, setActiveSection] = useState('');
+
+  // Set the first article as active when articles are loaded
+  useEffect(() => {
+    if (!loading && articles.length > 0 && !activeSection) {
+      setActiveSection(articles[0].id);
+    }
+  }, [articles, loading, activeSection]);
 
   return (
     <Container size="xl" py="xl">
       <Grid>
         <Grid.Col span={{ base: 12, md: 3 }}>
           <DocsSidebar
-            sections={docSections}
             activeSection={activeSection}
             onSectionChange={setActiveSection}
           />
