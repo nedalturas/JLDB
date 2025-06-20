@@ -245,11 +245,6 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
             onChange={(value) => setRowsPerPage(Number(value))}
             w={150}
           />
-          <Pagination
-            value={currentPage}
-            onChange={setCurrentPage}
-            total={totalPages}
-          />
         </Group>
 
         <ScrollArea>
