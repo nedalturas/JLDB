@@ -12,13 +12,14 @@
   "dependencies": {
     "@mantine/core": "8.1.0",
     "@mantine/hooks": "8.1.0",
+    "@tabler/icons-react": "^3.34.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^6.28.0",
     "react-markdown": "^9.0.1",
-    "remark-gfm": "^4.0.0",
+    "react-router-dom": "^6.28.0",
     "rehype-highlight": "^7.0.0",
-    "rehype-raw": "^7.0.0"
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.8",
