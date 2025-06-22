@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Table,
   ScrollArea,
@@ -48,37 +48,25 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   const [opened, setOpened] = useState(false);
   const [selectedRow, setSelectedRow] = useState<FilteredData | null>(null);
   const [data, setData] = useState<SheetData[]>([]);
+  const [filteredData, setFilteredData] = useState<FilteredData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5); // Reduced from 10 to 5
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const SHEET_ID = '1aAOwWOLyUdbT2a3F4IBTHDPnXBlBH240OFtIKom5H9Q';
   const SHEET_NAME = 'Sheet1';
 
-  // Fetch data with error handling and timeout
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // Add timeout to prevent hanging requests
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
         const response = await fetch(
-          `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`,
-          { 
-            signal: controller.signal,
-            headers: {
-              'Cache-Control': 'max-age=300', // Cache for 5 minutes
-            }
-          }
+          `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`
         );
-
-        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -92,11 +80,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         }
       } catch (err) {
         console.error('Error fetching data:', err);
-        if (err instanceof Error && err.name === 'AbortError') {
-          setError('Request timed out. Please try again.');
-        } else {
-          setError(err instanceof Error ? err.message : 'Failed to fetch data');
-        }
+        setError(err instanceof Error ? err.message : 'Failed to fetch data');
       } finally {
         setLoading(false);
       }
@@ -105,11 +89,13 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     fetchData();
   }, [onDataLoad]);
 
-  // Memoize processed data to avoid recalculation on every render
-  const processedData = useMemo(() => {
-    if (!data || data.length === 0) return [];
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      setFilteredData([]);
+      return;
+    }
 
-    return data.map((row) => {
+    const processedData: FilteredData[] = data.map((row) => {
       const cities = [];
       if (row['Dubai'] === 'TRUE' || row['Dubai'] === true)
         cities.push('Dubai');
@@ -130,10 +116,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         whatsapp: row['Whatsapp'] || '',
       };
     });
-  }, [data]);
 
-  // Memoize filtered data to improve performance
-  const filteredData = useMemo(() => {
     let filtered = processedData;
 
     if (filters) {
@@ -160,13 +143,9 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
       }
     }
 
-    return filtered;
-  }, [processedData, filters]);
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
+    setFilteredData(filtered);
+    setCurrentPage(1); // reset to first page when filter changes
+  }, [data, filters]);
 
   const handleView = (row: FilteredData) => {
     setSelectedRow(row);
@@ -202,14 +181,6 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
       <Container>
         <Alert color="red" title="Error loading data">
           {error}
-          <Button 
-            variant="light" 
-            size="xs" 
-            mt="sm"
-            onClick={() => window.location.reload()}
-          >
-            Retry
-          </Button>
         </Alert>
       </Container>
     );
@@ -269,17 +240,11 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         <Group justify="space-between" mb="md">
           <Select
             label="Rows per page"
-            data={['5', '10', '25', '50']} // Removed 100 option for better performance
+            data={['5', '10', '25', '50', '100']}
             value={rowsPerPage.toString()}
-            onChange={(value) => {
-              setRowsPerPage(Number(value));
-              setCurrentPage(1); // Reset to first page when changing rows per page
-            }}
+            onChange={(value) => setRowsPerPage(Number(value))}
             w={150}
           />
-          <Text size="sm" c="dimmed">
-            Showing {startIndex + 1}-{Math.min(endIndex, filteredData.length)} of {filteredData.length} results
-          </Text>
         </Group>
 
         <ScrollArea>
@@ -295,7 +260,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
             </Table.Thead>
             <Table.Tbody>
               {pageData.map((row, idx) => (
-                <Table.Tr key={`${row.companyName}-${idx}`}>
+                <Table.Tr key={idx + startIndex}>
                   <Table.Td>{row.companyName}</Table.Td>
                   <Table.Td>{row.citysCoverage.join(', ') || 'N/A'}</Table.Td>
                   <Table.Td>{row.serviceType}</Table.Td>
@@ -329,19 +294,18 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           </Table>
         </ScrollArea>
 
-        {totalPages > 1 && (
-          <Group justify="center" mt="md">
-            <Pagination
-              value={currentPage}
-              onChange={setCurrentPage}
-              total={totalPages}
-              size="sm"
-            />
-          </Group>
-        )}
+        <Group justify="center" mt="md">
+          <Pagination
+            value={currentPage}
+            onChange={setCurrentPage}
+            total={totalPages}
+          />
+        </Group>
       </Container>
     </>
   );
 }
 
 export default ResultsTable;
+
+
