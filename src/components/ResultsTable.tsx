@@ -14,6 +14,8 @@ import {
   Select,
 } from '@mantine/core';
 
+import { IconEye, IconBrandWhatsapp } from '@tabler/icons-react';
+
 interface SheetData {
   'Company Name': string;
   Dubai: string;
@@ -54,6 +56,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [scrolled, setScrolled] = useState(false);
 
   const SHEET_ID = '1aAOwWOLyUdbT2a3F4IBTHDPnXBlBH240OFtIKom5H9Q';
   const SHEET_NAME = 'Sheet1';
@@ -247,8 +250,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           />
         </Group>
 
-        <ScrollArea>
-          <Table striped highlightOnHover withTableBorder stickyHeader>
+        <ScrollArea h={500} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+          <Table miw={700} highlightOnHover withTableBorder stickyHeader>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Company Name</Table.Th>
@@ -266,7 +269,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   <Table.Td>{row.serviceType}</Table.Td>
                   <Table.Td>
                     <Badge
-                      variant="light"
+                      variant="dot"
+                      size='xs'
                       color={row.status.toLowerCase() === 'active' ? 'green' : 'red'}
                     >
                       {row.status}
@@ -274,17 +278,17 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   </Table.Td>
                   <Table.Td>
                     <Button.Group>
-                      <Button size="xs" onClick={() => handleView(row)}>
-                        View
+                      <Button size="compact-xs" onClick={() => handleView(row)}>
+                        <IconEye stroke={1.5} size={18}/>
                       </Button>
                       <Button
-                        size="xs"
+                        size="compact-xs"
                         variant="outline"
                         color="blue"
                         onClick={() => handleChat(row)}
                         disabled={!row.whatsapp}
                       >
-                        Chat
+                      <IconBrandWhatsapp stroke={1.5} size={18}/>
                       </Button>
                     </Button.Group>
                   </Table.Td>
