@@ -1,0 +1,122 @@
+.footer {
+  background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-8));
+  border-top: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  padding: 40px 0 20px 0;
+  margin-top: auto;
+  width: 100%;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-dark-0));
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linkItem {
+  margin-bottom: 8px;
+}
+
+.link {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: var(--mantine-color-blue-6);
+  text-decoration: none;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.socialLink {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  transition: color 0.2s ease;
+}
+
+.socialLink:hover {
+  color: var(--mantine-color-blue-6);
+}
+
+.divider {
+  border-top: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  margin: 24px 0 16px 0;
+}
+
+.bottomSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.copyright {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  font-size: 14px;
+}
+
+.bottomLinks {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.bottomLink {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.bottomLink:hover {
+  color: var(--mantine-color-blue-6);
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .footerContent {
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .section {
+    min-width: auto;
+  }
+  
+  .bottomSection {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .bottomLinks {
+    justify-content: center;
+  }
+}
