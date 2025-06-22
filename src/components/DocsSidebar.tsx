@@ -1,6 +1,6 @@
-import { Stack, NavLink, Paper, Button, Drawer, Badge, Text } from '@mantine/core';
+import { Stack, Paper, Button, Drawer, Text } from '@mantine/core';
 import { useMediaQuery, useDisclosure } from '@mantine/hooks';
-import { IconMenu2, IconBook } from '@tabler/icons-react';
+import { IconMenu2, IconBook, IconList } from '@tabler/icons-react';
 import { useMarkdownDocs } from '../hooks/useMarkdownDocs';
 import classes from './DocsSidebar.module.css';
 
@@ -34,36 +34,84 @@ export function DocsSidebar({ activeSection, onSectionChange }: DocsSidebarProps
     }
   };
 
-  const renderMenuContent = () => {
+  const renderDesktopMenu = () => {
     if (loading) {
       return (
-        <div>Loading menu...</div>
+        <div style={{ padding: '16px' }}>
+          <Text size="sm" c="dimmed">Loading menu...</Text>
+        </div>
       );
     }
 
     return (
-      <Stack gap="md">
+      <div>
+        <div className={classes.tocHeader}>
+          <IconList size={16} className={classes.tocIcon} />
+          Table of contents
+        </div>
+        
+        {Object.entries(groupedArticles).map(([category, categoryArticles]) => (
+          <div key={category} className={classes.categorySection}>
+            {Object.keys(groupedArticles).length > 1 && (
+              <div className={classes.categoryTitle}>
+                {category}
+              </div>
+            )}
+            {categoryArticles.map((article) => (
+              <a
+                key={article.id}
+                href="#"
+                className={classes.navLink}
+                data-active={activeSection === article.id || undefined}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSectionChange(article.id);
+                }}
+              >
+                {article.title}
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderMobileMenu = () => {
+    if (loading) {
+      return (
+        <div style={{ padding: '16px' }}>
+          <Text size="sm" c="dimmed">Loading menu...</Text>
+        </div>
+      );
+    }
+
+    return (
+      <div className={classes.drawerContent}>
         {Object.entries(groupedArticles).map(([category, categoryArticles]) => (
           <div key={category}>
             {Object.keys(groupedArticles).length > 1 && (
-              <Badge variant="light" size="sm" mb="xs">
+              <div className={classes.drawerCategoryTitle}>
                 {category}
-              </Badge>
+              </div>
             )}
-            <Stack gap="xs">
-              {categoryArticles.map((article) => (
-                <NavLink
-                  key={article.id}
-                  label={article.title}
-                  active={activeSection === article.id}
-                  onClick={() => handleSectionChange(article.id)}
-                  className={classes.navLink}
-                />
-              ))}
-            </Stack>
+            {categoryArticles.map((article) => (
+              <a
+                key={article.id}
+                href="#"
+                className={classes.drawerNavLink}
+                data-active={activeSection === article.id || undefined}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSectionChange(article.id);
+                }}
+              >
+                {article.title}
+              </a>
+            ))}
           </div>
         ))}
-      </Stack>
+      </div>
     );
   };
 
@@ -89,25 +137,24 @@ export function DocsSidebar({ activeSection, onSectionChange }: DocsSidebarProps
           opened={opened}
           onClose={close}
           title={
-            <Text fw={600} size="lg">
-              Documentation
-            </Text>
+            <div className={classes.tocHeader}>
+              <IconList size={16} className={classes.tocIcon} />
+              Table of contents
+            </div>
           }
           size="sm"
           position="left"
           zIndex={1000000}
         >
-          <Paper p="sm">
-            {renderMenuContent()}
-          </Paper>
+          {renderMobileMenu()}
         </Drawer>
       </>
     );
   }
 
   return (
-    <Paper shadow="sm" p="md" radius="md" className={classes.sidebar}>
-      {renderMenuContent()}
+    <Paper shadow="sm" radius="md" className={classes.sidebar}>
+      {renderDesktopMenu()}
     </Paper>
   );
 }
