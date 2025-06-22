@@ -171,11 +171,11 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   if (loading) {
     return (
       <Container>
-        <Group justify="center" p="xl">
+        <Group justify="center" align='center' p="xl">
           <Loader size="lg" />
           <Text>Loading data...</Text>
         </Group>
-      </Container>
+      </Container >
     );
   }
 
@@ -279,7 +279,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   <Table.Td>
                     <Button.Group>
                       <Button size="compact-xs" onClick={() => handleView(row)}>
-                        <IconEye stroke={1.5} size={18}/>
+                        <IconEye stroke={1.5} size={18} />
                       </Button>
                       <Button
                         size="compact-xs"
@@ -288,7 +288,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                         onClick={() => handleChat(row)}
                         disabled={!row.whatsapp}
                       >
-                      <IconBrandWhatsapp stroke={1.5} size={18}/>
+                        <IconBrandWhatsapp stroke={1.5} size={18} />
                       </Button>
                     </Button.Group>
                   </Table.Td>
