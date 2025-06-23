@@ -99,28 +99,6 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
       return;
     }
 
-    // const processedData: FilteredData[] = data.map((row) => {
-    //   const cities = [];
-    //   if (row['Dubai'] === 'TRUE' || row['Dubai'] === true)
-    //     cities.push('Dubai');
-    //   if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true)
-    //     cities.push('Abu Dhabi');
-    //   if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true)
-    //     cities.push('Sharjah');
-    //   if (row['Ajman'] === 'TRUE' || row['Ajman'] === true)
-    //     cities.push('Ajman');
-    //   if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true)
-    //     cities.push('Al Ain');
-
-    //   return {
-    //     companyName: row['Company Name'] || 'N/A',
-    //     citysCoverage: cities,
-    //     serviceType: row['Service Type'] || 'N/A',
-    //     status: row['Status'] || 'Active',
-    //     whatsapp: row['Whatsapp'] || '',
-    //   };
-    // });
-
     const processedData: FilteredData[] = data.map((row) => {
       const cityNames: (keyof Pick<SheetData, 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Al Ain'>)[] = 
         ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Al Ain'];
@@ -272,11 +250,11 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           <Table miw={700} highlightOnHover withTableBorder stickyHeader>
             <Table.Thead className={cx(classes.header, {[classes.scrolled]: scrolled})}>
               <Table.Tr>
-                <Table.Th>Company Name</Table.Th>
-                <Table.Th>City Coverage</Table.Th>
-                <Table.Th>Service Type</Table.Th>
-                <Table.Th>Status</Table.Th>
-                <Table.Th>Actions</Table.Th>
+                <Table.Th className={classes.headerCell}>Company Name</Table.Th>
+                <Table.Th className={classes.headerCell}>City Coverage</Table.Th>
+                <Table.Th className={classes.headerCell}>Service Type</Table.Th>
+                <Table.Th className={classes.headerCell}>Status</Table.Th>
+                <Table.Th className={classes.headerCell}>Actions</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -329,5 +307,3 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
 }
 
 export default ResultsTable;
-
-
