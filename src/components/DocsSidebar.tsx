@@ -1,4 +1,4 @@
-import { Stack, Paper, Button, Drawer, Text } from '@mantine/core';
+import { Paper, Button, Drawer, Text } from '@mantine/core';
 import { useMediaQuery, useDisclosure } from '@mantine/hooks';
 import { IconMenu2, IconBook, IconList } from '@tabler/icons-react';
 import { useMarkdownDocs } from '../hooks/useMarkdownDocs';

@@ -3,7 +3,6 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import { Paper, Code, Title, Text, List, Table, Blockquote, Divider } from '@mantine/core';
-import { ReactNode } from 'react';
 import 'highlight.js/styles/github.css';
 
 interface MarkdownRendererProps {

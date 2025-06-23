@@ -1,5 +1,5 @@
-import { Container, Title, Text, Alert, Loader, Stack } from '@mantine/core';
-import { useMarkdownDocs, DocArticle } from '../hooks/useMarkdownDocs';
+import { Container,Text, Alert, Loader, Stack } from '@mantine/core';
+import { useMarkdownDocs } from '../hooks/useMarkdownDocs';
 import { MarkdownRenderer } from './MarkdownRenderer';
 
 interface DocsContentProps {

@@ -13,7 +13,8 @@ import {
   Pagination,
   Select,
 } from '@mantine/core';
-
+import cx from 'clsx';
+import classes from './ResultsTable.module.css';
 import { IconEye, IconBrandWhatsapp } from '@tabler/icons-react';
 
 interface SheetData {
@@ -252,7 +253,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
 
         <ScrollArea h={500} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
           <Table miw={700} highlightOnHover withTableBorder stickyHeader>
-            <Table.Thead>
+            <Table.Thead className={cx(classes.header, {[classes.scrolled]: scrolled})}>
               <Table.Tr>
                 <Table.Th>Company Name</Table.Th>
                 <Table.Th>City Coverage</Table.Th>
