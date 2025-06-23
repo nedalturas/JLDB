@@ -275,16 +275,15 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   <Table.Td>
                     <Button.Group>
                       <Button size="compact-xs" onClick={() => handleView(row)}>
-                        <IconEye stroke={1.5} size={18} />
+                        <IconEye stroke={1.5} size={18} color='black'/>
                       </Button>
                       <Button
                         size="compact-xs"
-                        variant="outline"
-                        color="blue"
+                        variant="light"
                         onClick={() => handleChat(row)}
                         disabled={!row.whatsapp}
                       >
-                        <IconBrandWhatsapp stroke={1.5} size={18} />
+                        <IconBrandWhatsapp stroke={1.5} size={18} color=' var(--mantine-color-primary-filled)'/>
                       </Button>
                     </Button.Group>
                   </Table.Td>

@@ -1,8 +1,6 @@
 import { createTheme } from "@mantine/core";
 
 export const theme = createTheme({
-  /* Put your mantine theme override here */
-
   colors: {
     primary: [
       "#e0fbff",
@@ -17,20 +15,18 @@ export const theme = createTheme({
       "#0076a8"
     ]
   },
-  primaryShade: 4,
+  primaryShade: 6,
   primaryColor: "primary",
   defaultRadius: "sm",
   other: {
     buttonActiveStyle: "default"
   },
   
-  // Enhanced theme configuration for better dark mode support
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
   headings: {
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
   },
   
-  // Custom component styles for consistent theming
   components: {
     Paper: {
       defaultProps: {
@@ -43,18 +39,17 @@ export const theme = createTheme({
       },
     },
     Table: {
-      styles: (theme) => ({
+      styles: {
         th: {
-          backgroundColor: theme.colorScheme === 'dark' 
-            ? theme.colors.dark[6] 
-            : theme.colors.gray[0],
-          borderBottom: `1px solid ${
-            theme.colorScheme === 'dark' 
-              ? theme.colors.dark[4] 
-              : theme.colors.gray[3]
-          }`,
+          backgroundColor: 'var(--mantine-color-gray-0)',
+          borderBottom: '1px solid var(--mantine-color-gray-3)',
+          
+          '@media (prefers-color-scheme: dark)': {
+            backgroundColor: 'var(--mantine-color-dark-6)',
+            borderBottom: '1px solid var(--mantine-color-dark-4)',
+          },
         },
-      }),
+      },
     },
   },
 });
