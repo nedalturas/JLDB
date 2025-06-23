@@ -22,5 +22,39 @@ export const theme = createTheme({
   defaultRadius: "sm",
   other: {
     buttonActiveStyle: "default"
-  }
+  },
+  
+  // Enhanced theme configuration for better dark mode support
+  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
+  headings: {
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
+  },
+  
+  // Custom component styles for consistent theming
+  components: {
+    Paper: {
+      defaultProps: {
+        shadow: 'sm',
+      },
+    },
+    Button: {
+      defaultProps: {
+        variant: 'filled',
+      },
+    },
+    Table: {
+      styles: (theme) => ({
+        th: {
+          backgroundColor: theme.colorScheme === 'dark' 
+            ? theme.colors.dark[6] 
+            : theme.colors.gray[0],
+          borderBottom: `1px solid ${
+            theme.colorScheme === 'dark' 
+              ? theme.colors.dark[4] 
+              : theme.colors.gray[3]
+          }`,
+        },
+      }),
+    },
+  },
 });

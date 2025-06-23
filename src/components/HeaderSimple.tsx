@@ -1,6 +1,7 @@
 import { Burger, Container, Group, Text, Drawer, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link, useLocation } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
 import classes from './HeaderSimple.module.css';
 
 const links = [
@@ -43,11 +44,14 @@ export function HeaderSimple() {
           <Link to="/" className={classes.logo}>
             <Text fw={700} size="lg" component="span">JLDB</Text>
           </Link>
-          <Group gap={5} visibleFrom="xs">
-            {items}
+          
+          <Group gap="sm">
+            <Group gap={5} visibleFrom="xs">
+              {items}
+            </Group>
+            <ThemeToggle />
+            <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
           </Group>
-
-          <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
         </Container>
       </header>
 
@@ -55,9 +59,12 @@ export function HeaderSimple() {
         opened={opened}
         onClose={close}
         title={
-          <Link to="/" className={classes.logo} onClick={close}>
-            <Text fw={700} size="lg" component="span">JLDB</Text>
-          </Link>
+          <Group justify="space-between" style={{ width: '100%' }}>
+            <Link to="/" className={classes.logo} onClick={close}>
+              <Text fw={700} size="lg" component="span">JLDB</Text>
+            </Link>
+            <ThemeToggle />
+          </Group>
         }
         hiddenFrom="xs"
         zIndex={1000000}
