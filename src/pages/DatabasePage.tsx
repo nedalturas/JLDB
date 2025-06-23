@@ -8,7 +8,7 @@ function DatabasePage() {
     service: '',
     search: ''
   });
-  const [sheetData, setSheetData] = useState([]);
+  const [sheetData, setSheetData] = useState<any[]>([]);
 
   const handleFilterChange = useCallback((newFilters: {
     city: string;

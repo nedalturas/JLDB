@@ -19,11 +19,11 @@ import { IconEye, IconBrandWhatsapp } from '@tabler/icons-react';
 
 interface SheetData {
   'Company Name': string;
-  Dubai: string;
-  'Abu Dhabi': string;
-  Sharjah: string;
-  Ajman: string;
-  'Al Ain': string;
+  Dubai: string | boolean;
+  'Abu Dhabi': string | boolean;
+  Sharjah: string | boolean;
+  Ajman: string | boolean;
+  'Al Ain': string | boolean;
   'Service Type': string;
   Status: string;
   Whatsapp: string;
@@ -99,19 +99,36 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
       return;
     }
 
-    const processedData: FilteredData[] = data.map((row) => {
-      const cities = [];
-      if (row['Dubai'] === 'TRUE' || row['Dubai'] === true)
-        cities.push('Dubai');
-      if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true)
-        cities.push('Abu Dhabi');
-      if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true)
-        cities.push('Sharjah');
-      if (row['Ajman'] === 'TRUE' || row['Ajman'] === true)
-        cities.push('Ajman');
-      if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true)
-        cities.push('Al Ain');
+    // const processedData: FilteredData[] = data.map((row) => {
+    //   const cities = [];
+    //   if (row['Dubai'] === 'TRUE' || row['Dubai'] === true)
+    //     cities.push('Dubai');
+    //   if (row['Abu Dhabi'] === 'TRUE' || row['Abu Dhabi'] === true)
+    //     cities.push('Abu Dhabi');
+    //   if (row['Sharjah'] === 'TRUE' || row['Sharjah'] === true)
+    //     cities.push('Sharjah');
+    //   if (row['Ajman'] === 'TRUE' || row['Ajman'] === true)
+    //     cities.push('Ajman');
+    //   if (row['Al Ain'] === 'TRUE' || row['Al Ain'] === true)
+    //     cities.push('Al Ain');
 
+    //   return {
+    //     companyName: row['Company Name'] || 'N/A',
+    //     citysCoverage: cities,
+    //     serviceType: row['Service Type'] || 'N/A',
+    //     status: row['Status'] || 'Active',
+    //     whatsapp: row['Whatsapp'] || '',
+    //   };
+    // });
+
+    const processedData: FilteredData[] = data.map((row) => {
+      const cityNames: (keyof Pick<SheetData, 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Al Ain'>)[] = 
+        ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Al Ain'];
+      
+      const cities = cityNames.filter(city => 
+        row[city] === 'TRUE' || row[city] === true
+      );
+    
       return {
         companyName: row['Company Name'] || 'N/A',
         citysCoverage: cities,
