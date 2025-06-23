@@ -32,7 +32,7 @@
   font-size: 13px;
   /* color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2)); */
   /* background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6)); */
-  color: var(--mantine-color-blue-7);
+  color: var(--mantine-color-primary-filled);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
@@ -48,7 +48,7 @@
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1));
   text-decoration: none;
   transition: all 0.15s ease;
-  border-left: 3px solid transparent;
+  /* border-left: 3px solid transparent; */
   position: relative;
 }
 
@@ -58,9 +58,11 @@
 }
 
 .navLink[data-active] {
-  background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6));
-  color: var(--mantine-color-blue-7);
-  border-left-color: var(--mantine-color-blue-6);
+  /* background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6));
+  color: var(--mantine-color-blue-7); */
+  background-color: var(--mantine-color-primary-filled);
+    color: var(--mantine-color-text-dark); 
+  /* border-left-color: var(--mantine-color-blue-6); */
   font-weight: 500;
 }
 
@@ -71,7 +73,8 @@
   top: 0;
   bottom: 0;
   width: 3px;
-  background-color: var(--mantine-color-blue-6);
+  /* background-color: var(--mantine-color-blue-6); */
+  background-color: var(--mantine-color-primary-filled);
 }
 
 .mobileMenuButton {
@@ -126,7 +129,7 @@
   font-weight: 600;
   font-size: 13px;
   /* color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2)); */
-  color: var(--mantine-color-blue-7);
+  color: var(--mantine-color-primary-filled);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 4px;
