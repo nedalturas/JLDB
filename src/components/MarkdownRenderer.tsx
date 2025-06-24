@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
-import { Paper, Code, Title, Text, List, Table, Blockquote, Divider, useMantineColorScheme } from '@mantine/core';
+import { Paper, Code, Title, Text, List, Table, Blockquote, Divider, useMantineColorScheme, Image } from '@mantine/core';
 import 'highlight.js/styles/github.css';
 import 'highlight.js/styles/github-dark.css';
 
@@ -13,6 +13,18 @@ interface MarkdownRendererProps {
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === 'dark';
+
+  // Responsive Image Component
+  const ResponsiveImage = ({ src, alt }: { src?: string; alt?: string }) => {
+    if (!src) return null;
+    return (
+      <Image
+        src={src}
+        alt={alt || ''}
+        style={{ maxWidth: '100%', height: 'auto' }}
+      />
+    );
+  };
 
   return (
     <div style={{ 
@@ -198,6 +210,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               {children}
             </Text>
           ),
+
+          // Images
+          img: ({ src, alt }) => <ResponsiveImage src={src} alt={alt} />,
 
           // Strong/Bold
           strong: ({ children }) => (
