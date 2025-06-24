@@ -1,7 +1,8 @@
 .header {
   height: 56px;
   margin-bottom: 40px;
-  background-color: var(--mantine-color-body);
+  /* background-color: var(--mantine-color-body); */
+  background-color: transparent;
   border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
   position: sticky;
   top: 0;
