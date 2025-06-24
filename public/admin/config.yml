@@ -14,5 +14,5 @@ collections:
     fields:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Order", name: "order", widget: "number", default: 1}
-      - {label: "Category", name: "category", widget: "select", options: ["Basics", "Using JLDB", "Developers", "Support"]}
+      - {label: "Category", name: "category", widget: "select", options: ["Basics", "JL Docs"]}
       - {label: "Body", name: "body", widget: "markdown"}
