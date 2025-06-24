@@ -120,7 +120,7 @@
 
 .drawerNavLink[data-active] {
   background-color: var(--mantine-color-blue-light);
-  color: var(--mantine-color-blue-filled);
+  color: var(--mantine-color-primary-filled);
   font-weight: 500;
 }
 

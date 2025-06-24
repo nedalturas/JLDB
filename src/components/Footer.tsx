@@ -1,4 +1,4 @@
-import { Container, Text, } from '@mantine/core';
+import { Container, Text, Anchor } from '@mantine/core';
 import classes from './Footer.module.css';
 
 export function Footer() {
@@ -10,7 +10,7 @@ export function Footer() {
 
         <div className={classes.bottomSection}>
           <Text className={classes.copyright}>
-            © {currentYear} JLDB. All rights reserved.
+            © {currentYear} JLDB. All rights reserved. <Anchor href="http://httpwanderer.dev" target="_blank" color="inherit">httpwanderer.dev</Anchor>
           </Text>
          
         </div>
