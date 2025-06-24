@@ -1,6 +1,6 @@
 ---
 title: Home Cleaning Addons
-order: 1
+order: 2
 category: JL Docs
 ---
 | Name                | Duration (in minutes) | Max Unit Purchase |
