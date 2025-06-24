@@ -9,11 +9,13 @@ Learn how to effectively use JLDB's search and filtering system to find exactly 
 
 ## Filter Types
 
-### City Coverage Filter
+### City Coverage Filter\
+
+F﻿ilter results by specific cities across the UAE. Each provider indicates which cities they serve:
 
 ![](/images/cityfilter.png)
 
-Filter results by specific cities across the UAE. Each provider indicates which cities they serve:
+
 
 ### Service Type Categories
 
@@ -24,8 +26,6 @@ Browse by service categories to find specialized providers
 ## Search Functionality
 
 You can also directly search the name of the provider
-
-
 
 ![Search Filter](/images/search.png)
 
