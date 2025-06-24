@@ -6,33 +6,45 @@ category: Basics
 
 # Getting Started
 
-Welcome to **JLDB**! This guide will help you get started with our comprehensive service provider database for the UAE.
+Welcome to our **JLDB**! tool - a simple yet powerful solution for searching active marketplace providers working with Justlife and connect with them through WhatsApp group chats.
 
-## What is JLDB?
+## ⏲  What is JLDB?
 
-JLDB is a powerful platform that connects customers with verified service providers across the United Arab Emirates. Whether you need cleaning services, plumbing, electrical work, or any other professional service, JLDB makes it easy to find the right provider for your needs.
+JLDB which is now on version 2 is the successor of the [previous build](https://jlteamdb.netlify.app/) was created to help the teams from _operations_, _partner success_ & _exclusive teams_ to:
 
-### Key Features
+- Search for **active marketplace teams** in different cities
+- instantly connect with those teams via WhatsApp group chats
+- identify partners that are active or inactive
 
-- **Comprehensive Database**: Access to hundreds of verified service providers
-- **Smart Filtering**: Find providers by city, service type, and availability
-- **Direct Communication**: Connect with providers via WhatsApp integration
-- **Real-time Updates**: Always up-to-date provider information and status
+### 💡Key Features
+
+- **City-Based Team Lookup**  
+  Easily find out which teams are currently active in your area.
+
+- **Direct WhatsApp Group Links**  
+  Instantly reach out and join teams via curated WhatsApp group chat links.
+
+- **Dedicated Docs Page (Docs)**  
+  A dedicated section to answer the most common questions about our services, helping new users understand how everything works quickly.
 
 ## Quick Start Guide
 
 Follow these simple steps to find your perfect service provider:
 
 ### 1. Navigate to the Database
+
 Click on the "Database" tab in the main navigation to access our provider listings.
 
 ### 2. Use Filters to Narrow Down Results
+
 - **City Coverage**: Select your city (Dubai, Abu Dhabi, Sharjah, Ajman, Al Ain)
 - **Service Type**: Choose from categories like Cleaning, Plumbing, Electrical, etc.
 - **Search**: Enter specific company names or keywords
 
 ### 3. Browse Results
+
 Review the filtered results in our easy-to-read table format showing:
+
 - Company names
 - Service areas
 - Service types
@@ -40,6 +52,7 @@ Review the filtered results in our easy-to-read table format showing:
 - Available actions
 
 ### 4. Connect with Providers
+
 - Click **"View"** to see detailed provider information
 - Click **"Chat"** to start a WhatsApp conversation (when available)
 
@@ -58,4 +71,5 @@ If you encounter any issues or have questions, check out our [Support & Contact]
 
 ---
 
-*Ready to find your next service provider? Head over to the [Database](/) and start exploring!*
+_Ready to find your next service provider? Head over to the [Database](/) and start exploring!_
+
