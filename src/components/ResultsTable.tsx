@@ -29,7 +29,6 @@ import {
   IconTool,
   IconCircleCheck,
   IconCircleX,
-  IconPhone,
   IconExternalLink,
   IconCopy,
   IconCheck
