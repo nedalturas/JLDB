@@ -132,17 +132,12 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           <TextInput
             ref={searchInputRef}
             label="Search"
-            placeholder="Search company names..."
+            placeholder="Search company names... or ctrl + k"
+           
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
             leftSection={<IconSearch size={16} />}
-            rightSection={
-              <Group gap={2}>
-                <Kbd size="xs">Ctrl</Kbd>
-                <span style={{ fontSize: '10px' }}>+</span>
-                <Kbd size="xs">K</Kbd>
-              </Group>
-            }
+          
           />
         </Tooltip>
       </Group>
