@@ -12,10 +12,29 @@ import {
   Alert,
   Pagination,
   Select,
+  Stack,
+  Paper,
+  Divider,
+  ActionIcon,
+  Tooltip,
+  Box,
 } from '@mantine/core';
 import cx from 'clsx';
 import classes from './ResultsTable.module.css';
-import { IconEye, IconBrandWhatsapp } from '@tabler/icons-react';
+import { 
+  IconEye, 
+  IconBrandWhatsapp, 
+  IconBuilding,
+  IconMapPin,
+  IconTool,
+  IconCircleCheck,
+  IconCircleX,
+  IconPhone,
+  IconExternalLink,
+  IconCopy,
+  IconCheck
+} from '@tabler/icons-react';
+import { useClipboard } from '@mantine/hooks';
 
 interface SheetData {
   'Company Name': string;
@@ -58,6 +77,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [scrolled, setScrolled] = useState(false);
+
+  const clipboard = useClipboard({ timeout: 2000 });
 
   const SHEET_ID = '1aAOwWOLyUdbT2a3F4IBTHDPnXBlBH240OFtIKom5H9Q';
   const SHEET_NAME = 'Sheet1';
@@ -159,6 +180,10 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     }
   };
 
+  const handleCopyWhatsApp = (whatsappLink: string) => {
+    clipboard.copy(whatsappLink);
+  };
+
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
@@ -203,36 +228,165 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         <Modal
           opened={opened}
           onClose={() => setOpened(false)}
-          title="Company Details"
+          title={
+            <Group gap="sm">
+              <IconBuilding size={24} color="var(--mantine-color-primary-6)" />
+              <Text fw={600} size="lg">Company Details</Text>
+            </Group>
+          }
           centered
           size="md"
+          radius="md"
+          shadow="xl"
         >
           {selectedRow && (
-            <div>
-              <Text mb="sm">
-                <strong>Company Name:</strong> {selectedRow.companyName}
-              </Text>
-              <Text mb="sm">
-                <strong>City Coverage:</strong> {selectedRow.citysCoverage.join(', ')}
-              </Text>
-              <Text mb="sm">
-                <strong>Service Type:</strong> {selectedRow.serviceType}
-              </Text>
-              <Text mb="sm">
-                <strong>Status:</strong>{' '}
+            <Stack gap="lg">
+              {/* Company Name Section */}
+              <Paper p="md" radius="sm" bg="var(--mantine-color-gray-0)" style={{ 
+                backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))'
+              }}>
+                <Group gap="sm" mb="xs">
+                  <IconBuilding size={20} color="var(--mantine-color-primary-6)" />
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                    Company Name
+                  </Text>
+                </Group>
+                <Text fw={600} size="lg">
+                  {selectedRow.companyName}
+                </Text>
+              </Paper>
+
+              {/* City Coverage Section */}
+              <Box>
+                <Group gap="sm" mb="sm">
+                  <IconMapPin size={20} color="var(--mantine-color-blue-6)" />
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                    City Coverage
+                  </Text>
+                </Group>
+                <Group gap="xs">
+                  {selectedRow.citysCoverage.length > 0 ? (
+                    selectedRow.citysCoverage.map((city) => (
+                      <Badge
+                        key={city}
+                        variant="light"
+                        color="blue"
+                        size="md"
+                        leftSection={<IconMapPin size={12} />}
+                      >
+                        {city}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Text c="dimmed" fs="italic">No cities specified</Text>
+                  )}
+                </Group>
+              </Box>
+
+              <Divider />
+
+              {/* Service Type Section */}
+              <Box>
+                <Group gap="sm" mb="sm">
+                  <IconTool size={20} color="var(--mantine-color-orange-6)" />
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                    Service Types
+                  </Text>
+                </Group>
+                <Group gap="xs">
+                  {selectedRow.serviceType !== 'N/A' ? (
+                    selectedRow.serviceType.split(',').map((service, index) => (
+                      <Badge
+                        key={index}
+                        variant="light"
+                        color="orange"
+                        size="md"
+                        leftSection={<IconTool size={12} />}
+                      >
+                        {service.trim()}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Text c="dimmed" fs="italic">No services specified</Text>
+                  )}
+                </Group>
+              </Box>
+
+              <Divider />
+
+              {/* Status Section */}
+              <Group justify="space-between" align="center">
+                <Group gap="sm">
+                  {selectedRow.status.toLowerCase() === 'active' ? (
+                    <IconCircleCheck size={20} color="var(--mantine-color-green-6)" />
+                  ) : (
+                    <IconCircleX size={20} color="var(--mantine-color-red-6)" />
+                  )}
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                    Status
+                  </Text>
+                </Group>
                 <Badge
-                  variant="light"
+                  variant="filled"
                   color={selectedRow.status.toLowerCase() === 'active' ? 'green' : 'red'}
+                  size="lg"
+                  leftSection={
+                    selectedRow.status.toLowerCase() === 'active' ? (
+                      <IconCircleCheck size={14} />
+                    ) : (
+                      <IconCircleX size={14} />
+                    )
+                  }
                 >
                   {selectedRow.status}
                 </Badge>
-              </Text>
+              </Group>
+
+              {/* WhatsApp Section */}
               {selectedRow.whatsapp && (
-                <Text mb="sm">
-                  <strong>WhatsApp:</strong> Available
-                </Text>
+                <>
+                  <Divider />
+                  <Box>
+                    <Group gap="sm" mb="sm">
+                      <IconBrandWhatsapp size={20} color="var(--mantine-color-green-6)" />
+                      <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                        WhatsApp Contact
+                      </Text>
+                    </Group>
+                    <Group gap="sm">
+                      <Button
+                        leftSection={<IconBrandWhatsapp size={16} />}
+                        rightSection={<IconExternalLink size={14} />}
+                        color="green"
+                        variant="filled"
+                        onClick={() => handleChat(selectedRow)}
+                        flex={1}
+                      >
+                        Open Chat
+                      </Button>
+                      <Tooltip 
+                        label={clipboard.copied ? 'Copied!' : 'Copy WhatsApp link'}
+                        position="top"
+                        withArrow
+                      >
+                        <ActionIcon
+                          variant="light"
+                          color="green"
+                          size="lg"
+                          onClick={() => handleCopyWhatsApp(selectedRow.whatsapp)}
+                        >
+                          {clipboard.copied ? (
+                            <IconCheck size={16} />
+                          ) : (
+                            <IconCopy size={16} />
+                          )}
+                        </ActionIcon>
+                      </Tooltip>
+                    </Group>
+                  </Box>
+                </>
               )}
-            </div>
+            </Stack>
           )}
         </Modal>
 
