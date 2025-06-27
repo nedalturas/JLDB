@@ -1,5 +1,7 @@
-import { TextInput, Select, Group, Container } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import { TextInput, Select, Group, Container, Kbd, Tooltip } from '@mantine/core';
+import { useState, useEffect, useRef } from 'react';
+import { useHotkeys } from '@mantine/hooks';
+import { IconSearch } from '@tabler/icons-react';
 
 interface FilterProps {
   data?: any[];
@@ -14,6 +16,17 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
   const [city, setCity] = useState('');
   const [service, setService] = useState('');
   const [search, setSearch] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Add hotkey for Ctrl+K to focus search
+  useHotkeys([
+    ['ctrl+K', () => {
+      searchInputRef.current?.focus();
+    }],
+    ['cmd+K', () => {
+      searchInputRef.current?.focus();
+    }],
+  ]);
 
   // Extract unique cities dynamically from sheet columns
   const getUniqueCities = () => {
@@ -103,16 +116,38 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           value={service}
           onChange={(value) => setService(value || '')}
         />
-        <TextInput
-          label="Search"
-          placeholder="Search company names..."
-          value={search}
-          onChange={(event) => setSearch(event.currentTarget.value)}
-        />
+        <Tooltip
+          label={
+            <Group gap={4}>
+              <span>Press</span>
+              <Kbd size="xs">Ctrl</Kbd>
+              <span>+</span>
+              <Kbd size="xs">K</Kbd>
+              <span>to focus</span>
+            </Group>
+          }
+          position="bottom"
+          withArrow
+        >
+          <TextInput
+            ref={searchInputRef}
+            label="Search"
+            placeholder="Search company names..."
+            value={search}
+            onChange={(event) => setSearch(event.currentTarget.value)}
+            leftSection={<IconSearch size={16} />}
+            rightSection={
+              <Group gap={2}>
+                <Kbd size="xs">Ctrl</Kbd>
+                <span style={{ fontSize: '10px' }}>+</span>
+                <Kbd size="xs">K</Kbd>
+              </Group>
+            }
+          />
+        </Tooltip>
       </Group>
     </Container>
   );
 }
 
 export default Filters;
-
