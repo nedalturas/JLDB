@@ -13,8 +13,7 @@ Below are the guides for setting up your FreshDesk Filters for different LOB.
 
 ![](/images/nafd2.jpg)
 
-## \
-Partner Success Filters\
+## Partner Success Filters
 
 G﻿roups
 
