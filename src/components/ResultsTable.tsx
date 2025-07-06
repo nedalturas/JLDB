@@ -246,7 +246,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
               }}>
                 <Group gap="sm" mb="xs">
                   <IconBuilding size={20} color="var(--mantine-color-primary-6)" />
-                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase">
                     Company Name
                   </Text>
                 </Group>
@@ -259,7 +259,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
               <Box>
                 <Group gap="sm" mb="sm">
                   <IconMapPin size={20} color="var(--mantine-color-blue-6)" />
-                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase">
                     City Coverage
                   </Text>
                 </Group>
@@ -288,7 +288,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
               <Box>
                 <Group gap="sm" mb="sm">
                   <IconTool size={20} color="var(--mantine-color-orange-6)" />
-                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase">
                     Service Types
                   </Text>
                 </Group>
@@ -321,7 +321,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   ) : (
                     <IconCircleX size={20} color="var(--mantine-color-red-6)" />
                   )}
-                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" >
                     Status
                   </Text>
                 </Group>
@@ -348,7 +348,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   <Box>
                     <Group gap="sm" mb="sm">
                       <IconBrandWhatsapp size={20} color="var(--mantine-color-green-6)" />
-                      <Text fw={600} size="sm" c="dimmed" tt="uppercase" ls={0.5}>
+                      <Text fw={600} size="sm" c="dimmed" tt="uppercase" >
                         WhatsApp Contact
                       </Text>
                     </Group>
