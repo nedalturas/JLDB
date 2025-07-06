@@ -228,8 +228,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           opened={opened}
           onClose={() => setOpened(false)}
           title={
-            <Group gap="sm">
-              <IconBuilding size={24} color="var(--mantine-color-primary-6)" />
+            <Group gap="sm" mb="xs">
               <Text fw={600} size="lg">Company Details</Text>
             </Group>
           }
@@ -240,21 +239,19 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         >
           {selectedRow && (
             <Stack gap="lg">
-              {/* Company Name Section */}
-              <Paper p="md" radius="sm" bg="var(--mantine-color-gray-0)" style={{ 
-                backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))'
-              }}>
-                <Group gap="sm" mb="xs">
-                  <IconBuilding size={20} color="var(--mantine-color-primary-6)" />
-                  <Text fw={600} size="sm" c="dimmed" tt="uppercase">
+             
+              <Box>
+                <Group gap="sm" mb="sm">
+                  <IconBuilding size={20} color='var(--mantine-color-primary-6)' />
+                  <Text fw={700} size='sm' c="dimmed" tt="uppercase">
                     Company Name
                   </Text>
                 </Group>
-                <Text fw={600} size="lg">
+                <Group gap='xs'>
                   {selectedRow.companyName}
-                </Text>
-              </Paper>
-
+                </Group>
+              </Box>
+              <Divider />
               {/* City Coverage Section */}
               <Box>
                 <Group gap="sm" mb="sm">
