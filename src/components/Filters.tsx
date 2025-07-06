@@ -103,44 +103,12 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           value={service}
           onChange={(value) => setService(value || '')}
         />
-<<<<<<< HEAD
         <TextInput
           label="Search"
           placeholder="Search company names..."
           value={search}
           onChange={(event) => setSearch(event.currentTarget.value)}
         />
-=======
-        <Tooltip
-          label={
-            <Group gap={4}>
-              <span>Press</span>
-              <Kbd size="xs">Ctrl</Kbd>
-              <span>+</span>
-              <Kbd size="xs">K</Kbd>
-              <span>to focus</span>
-            </Group>
-          }
-          position="bottom"
-          withArrow
-        >
-          <TextInput
-            ref={searchInputRef}
-            label="Search"
-            placeholder="Search company names..."
-            value={search}
-            onChange={(event) => setSearch(event.currentTarget.value)}
-            leftSection={<IconSearch size={16} />}
-            rightSection={
-              <Group gap={2}>
-                <Kbd size="xs">Ctrl</Kbd>
-                <span style={{ fontSize: '10px' }}>+</span>
-                <Kbd size="xs">K</Kbd>
-              </Group>
-            }
-          />
-        </Tooltip>
->>>>>>> parent of db04893 (implemented a keyboard shortcut in filters component)
       </Group>
     </Container>
   );
