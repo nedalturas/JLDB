@@ -13,7 +13,6 @@ import {
   Pagination,
   Select,
   Stack,
-  Paper,
   Divider,
   ActionIcon,
   Tooltip,
