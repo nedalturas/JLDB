@@ -1,5 +1,7 @@
-import { TextInput, Select, Group, Container } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import { TextInput, Select, Group, Container, Kbd, Tooltip } from '@mantine/core';
+import { useState, useEffect, useRef } from 'react';
+import { useHotkeys } from '@mantine/hooks';
+import { IconSearch } from '@tabler/icons-react';
 
 interface FilterProps {
   data?: any[];
@@ -14,6 +16,22 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
   const [city, setCity] = useState('');
   const [service, setService] = useState('');
   const [search, setSearch] = useState('');
+  const [citySearchValue, setCitySearchValue] = useState('');
+  const [serviceSearchValue, setServiceSearchValue] = useState('');
+  const [isCityFocused, setIsCityFocused] = useState(false);
+  const [isServiceFocused, setIsServiceFocused] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Add hotkey for Ctrl+K to focus search
+  useHotkeys([
+    ['ctrl+K', () => {
+      searchInputRef.current?.focus();
+    }],
+    ['cmd+K', () => {
+      searchInputRef.current?.focus();
+    }],
+  ]);
 
   // Extract unique cities dynamically from sheet columns
   const getUniqueCities = () => {
@@ -84,15 +102,27 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
 
   return (
     <Container>
-      <Group gap="md" grow>
+      <Group gap="md" grow mb="md">
         <Select
           label="City Coverage"
           placeholder="Select city"
           data={cities}
           searchable
           clearable
+          variant={isCityFocused ? 'default' : 'filled'}
           value={city}
-          onChange={(value) => setCity(value || '')}
+          searchValue={citySearchValue}
+          onSearchChange={setCitySearchValue}
+          onChange={(value) => {
+            setCity(value || '');
+            setCitySearchValue(''); // Clear search when selection changes
+          }}
+          onDropdownOpen={() => {
+            setCitySearchValue(''); // Clear search when dropdown opens
+            setIsCityFocused(true); // Set focused state
+          }}
+          onDropdownClose={() => setIsCityFocused(false)} // Reset focused state
+          comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
         />
         <Select
           label="Service Type"
@@ -100,19 +130,52 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           data={services}
           searchable
           clearable
+          variant={isServiceFocused ? 'default' : 'filled'}
           value={service}
-          onChange={(value) => setService(value || '')}
+          searchValue={serviceSearchValue}
+          onSearchChange={setServiceSearchValue}
+          allowDeselect={true}
+          onChange={(value) => {
+            setService(value || '');
+            setServiceSearchValue(''); // Clear search when selection changes
+          }}
+          onDropdownOpen={() => {
+            setServiceSearchValue(''); // Clear search when dropdown opens
+            setIsServiceFocused(true); // Set focused state
+          }}
+          onDropdownClose={() => setIsServiceFocused(false)} // Reset focused state
+          comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
         />
-        <TextInput
-          label="Search"
-          placeholder="Search company names..."
-          value={search}
-          onChange={(event) => setSearch(event.currentTarget.value)}
-        />
+        <Tooltip
+          label={
+            <Group gap={4}>
+              <span>Press</span>
+              <Kbd size="xs">Ctrl</Kbd>
+              <span>+</span>
+              <Kbd size="xs">K</Kbd>
+              <span>to focus</span>
+            </Group>
+          }
+          position="bottom"
+          withArrow
+        >
+          <TextInput
+            ref={searchInputRef}
+            label="Search"
+            placeholder="Search company names... or ctrl + k"
+            value={search}
+            variant={isSearchFocused ? 'default' : 'filled'}
+            onChange={(event) => 
+              setSearch(event.currentTarget.value)
+            }
+            onClick={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+            leftSection={<IconSearch size={16} />}
+          />
+        </Tooltip>
       </Group>
     </Container>
   );
 }
 
 export default Filters;
-

@@ -10,4 +10,20 @@ export default defineConfig({
       '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
     },
   },
+  server: {
+    // Handle admin routes during development
+    proxy: {
+      '/admin': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            if (req.url === '/admin' || req.url === '/admin/') {
+              proxyReq.path = '/admin/index.html';
+            }
+          });
+        }
+      }
+    }
+  }
 })

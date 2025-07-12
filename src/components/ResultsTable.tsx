@@ -12,10 +12,28 @@ import {
   Alert,
   Pagination,
   Select,
+  Stack,
+  Divider,
+  ActionIcon,
+  Tooltip,
+  Box,
+  Flex
 } from '@mantine/core';
 import cx from 'clsx';
 import classes from './ResultsTable.module.css';
-import { IconEye, IconBrandWhatsapp } from '@tabler/icons-react';
+import {
+  IconEye,
+  IconBrandWhatsapp,
+  IconBuilding,
+  IconMapPin,
+  IconTool,
+  IconCircleCheck,
+  IconCircleX,
+  IconExternalLink,
+  IconCopy,
+  IconCheck
+} from '@tabler/icons-react';
+import { useClipboard } from '@mantine/hooks';
 
 interface SheetData {
   'Company Name': string;
@@ -59,6 +77,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [scrolled, setScrolled] = useState(false);
 
+  const clipboard = useClipboard({ timeout: 2000 });
+
   const SHEET_ID = '1aAOwWOLyUdbT2a3F4IBTHDPnXBlBH240OFtIKom5H9Q';
   const SHEET_NAME = 'Sheet1';
 
@@ -100,13 +120,13 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     }
 
     const processedData: FilteredData[] = data.map((row) => {
-      const cityNames: (keyof Pick<SheetData, 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Al Ain'>)[] = 
+      const cityNames: (keyof Pick<SheetData, 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Al Ain'>)[] =
         ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Al Ain'];
-      
-      const cities = cityNames.filter(city => 
+
+      const cities = cityNames.filter(city =>
         row[city] === 'TRUE' || row[city] === true
       );
-    
+
       return {
         companyName: row['Company Name'] || 'N/A',
         citysCoverage: cities,
@@ -159,6 +179,10 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     }
   };
 
+  const handleCopyWhatsApp = (whatsappLink: string) => {
+    clipboard.copy(whatsappLink);
+  };
+
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
@@ -167,7 +191,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   if (loading) {
     return (
       <Container>
-        <Group justify="center" align='center' p="xl">
+        <Group justify="center" align='center' p="xl" h={'500px'}>
           <Loader size="lg" />
           <Text>Loading data...</Text>
         </Group>
@@ -203,52 +227,169 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         <Modal
           opened={opened}
           onClose={() => setOpened(false)}
-          title="Company Details"
+          title={
+            <Group gap="sm" mb="xs">
+              <Text fw={600} size="lg">Company Details</Text>
+            </Group>
+          }
           centered
           size="md"
+          radius="md"
+          shadow="xl"
         >
           {selectedRow && (
-            <div>
-              <Text mb="sm">
-                <strong>Company Name:</strong> {selectedRow.companyName}
-              </Text>
-              <Text mb="sm">
-                <strong>City Coverage:</strong> {selectedRow.citysCoverage.join(', ')}
-              </Text>
-              <Text mb="sm">
-                <strong>Service Type:</strong> {selectedRow.serviceType}
-              </Text>
-              <Text mb="sm">
-                <strong>Status:</strong>{' '}
+            <Stack gap="lg">
+
+              <Box>
+                <Group gap="sm" mb="sm">
+                  <IconBuilding size={20} color='var(--mantine-color-primary-6)' />
+                  <Text fw={700} size='sm' c="dimmed" tt="uppercase">
+                    Company Name
+                  </Text>
+                </Group>
+                <Group gap='xs'>
+                  {selectedRow.companyName}
+                </Group>
+              </Box>
+              <Divider />
+              {/* City Coverage Section */}
+              <Box>
+                <Group gap="sm" mb="sm">
+                  <IconMapPin size={20} color="var(--mantine-color-blue-6)" />
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase">
+                    City Coverage
+                  </Text>
+                </Group>
+                <Group gap="xs">
+                  {selectedRow.citysCoverage.length > 0 ? (
+                    selectedRow.citysCoverage.map((city) => (
+                      <Badge
+                        key={city}
+                        variant="light"
+                        color="blue"
+                        size="md"
+                        leftSection={<IconMapPin size={12} />}
+                      >
+                        {city}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Text c="dimmed" fs="italic">No cities specified</Text>
+                  )}
+                </Group>
+              </Box>
+
+              <Divider />
+
+              {/* Service Type Section */}
+              <Box>
+                <Group gap="sm" mb="sm">
+                  <IconTool size={20} color="var(--mantine-color-orange-6)" />
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase">
+                    Service Types
+                  </Text>
+                </Group>
+                <Group gap="xs">
+                  {selectedRow.serviceType !== 'N/A' ? (
+                    selectedRow.serviceType.split(',').map((service, index) => (
+                      <Badge
+                        key={index}
+                        variant="light"
+                        color="orange"
+                        size="md"
+                        leftSection={<IconTool size={12} />}
+                      >
+                        {service.trim()}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Text c="dimmed" fs="italic">No services specified</Text>
+                  )}
+                </Group>
+              </Box>
+
+              <Divider />
+
+              {/* Status Section */}
+              <Group justify="space-between" align="center">
+                <Group gap="sm">
+                  {selectedRow.status.toLowerCase() === 'active' ? (
+                    <IconCircleCheck size={20} color="var(--mantine-color-green-6)" />
+                  ) : (
+                    <IconCircleX size={20} color="var(--mantine-color-red-6)" />
+                  )}
+                  <Text fw={600} size="sm" c="dimmed" tt="uppercase" >
+                    Status
+                  </Text>
+                </Group>
                 <Badge
-                  variant="light"
+                  variant="filled"
                   color={selectedRow.status.toLowerCase() === 'active' ? 'green' : 'red'}
+                  size="lg"
+                  leftSection={
+                    selectedRow.status.toLowerCase() === 'active' ? (
+                      <IconCircleCheck size={14} />
+                    ) : (
+                      <IconCircleX size={14} />
+                    )
+                  }
                 >
                   {selectedRow.status}
                 </Badge>
-              </Text>
+              </Group>
+
+              {/* WhatsApp Section */}
               {selectedRow.whatsapp && (
-                <Text mb="sm">
-                  <strong>WhatsApp:</strong> Available
-                </Text>
+                <>
+                  <Divider />
+                  <Box>
+                    <Group gap="sm" mb="sm">
+                      <IconBrandWhatsapp size={20} color="var(--mantine-color-green-6)" />
+                      <Text fw={600} size="sm" c="dimmed" tt="uppercase" >
+                        WhatsApp Contact
+                      </Text>
+                    </Group>
+                    <Group gap="sm">
+                      <Button
+                        leftSection={<IconBrandWhatsapp size={16} />}
+                        rightSection={<IconExternalLink size={14} />}
+                        color="green"
+                        variant="filled"
+                        onClick={() => handleChat(selectedRow)}
+                        flex={1}
+                      >
+                        Open Chat
+                      </Button>
+                      <Tooltip
+                        label={clipboard.copied ? 'Copied!' : 'Copy WhatsApp link'}
+                        position="top"
+                        withArrow
+                      >
+                        <ActionIcon
+                          variant="light"
+                          color="green"
+                          size="lg"
+                          onClick={() => handleCopyWhatsApp(selectedRow.whatsapp)}
+                        >
+                          {clipboard.copied ? (
+                            <IconCheck size={16} />
+                          ) : (
+                            <IconCopy size={16} />
+                          )}
+                        </ActionIcon>
+                      </Tooltip>
+                    </Group>
+                  </Box>
+                </>
               )}
-            </div>
+            </Stack>
           )}
         </Modal>
 
-        <Group justify="space-between" mb="md">
-          <Select
-            label="Rows per page"
-            data={['5', '10', '25', '50', '100']}
-            value={rowsPerPage.toString()}
-            onChange={(value) => setRowsPerPage(Number(value))}
-            w={150}
-          />
-        </Group>
 
         <ScrollArea h={500} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-          <Table miw={700} highlightOnHover withTableBorder stickyHeader>
-            <Table.Thead className={cx(classes.header, {[classes.scrolled]: scrolled})}>
+          <Table miw={700} highlightOnHover stickyHeader mb="md"  className={classes.table}>
+            <Table.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
               <Table.Tr>
                 <Table.Th className={classes.headerCell}>Company Name</Table.Th>
                 <Table.Th className={classes.headerCell}>City Coverage</Table.Th>
@@ -275,7 +416,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   <Table.Td>
                     <Button.Group>
                       <Button size="compact-xs" onClick={() => handleView(row)}>
-                        <IconEye stroke={1.5} size={18} color='black'/>
+                        <IconEye stroke={1.5} size={18} color='black' />
                       </Button>
                       <Button
                         size="compact-xs"
@@ -283,7 +424,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                         onClick={() => handleChat(row)}
                         disabled={!row.whatsapp}
                       >
-                        <IconBrandWhatsapp stroke={1.5} size={18} color=' var(--mantine-color-primary-filled)'/>
+                        <IconBrandWhatsapp stroke={1.5} size={18} color=' var(--mantine-color-primary-filled)' />
                       </Button>
                     </Button.Group>
                   </Table.Td>
@@ -293,12 +434,28 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           </Table>
         </ScrollArea>
 
-        <Group justify="center" mt="md">
+        <Group justify="space-between" mb="md" mt="md">
           <Pagination
             value={currentPage}
             onChange={setCurrentPage}
             total={totalPages}
           />
+
+          <Stack>
+            <Flex align="center" gap="xs">
+              <label htmlFor="rowsPerPage">Per page</label>
+              <Select
+                id="rowsPerPage"
+                data={['5', '10', '25', '50', '100']}
+                value={rowsPerPage.toString()}
+                onChange={(value) => setRowsPerPage(Number(value))}
+                comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
+                w={100}
+                maxDropdownHeight={100}
+              />
+            </Flex>
+          </Stack>
+
         </Group>
       </Container>
     </>

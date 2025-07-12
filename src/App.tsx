@@ -8,9 +8,19 @@ import DatabasePage from "./pages/DatabasePage";
 import DocsPage from "./pages/DocsPage";
 import NotFound from "./components/NotFound";
 import { usePageTitle } from "./hooks/usePageTitle";
+import { useEffect } from "react";
 
 function AppContent() {
   usePageTitle();
+
+  // Handle admin route redirect
+  useEffect(() => {
+    if (window.location.pathname === '/admin' || window.location.pathname === '/admin/') {
+      // Redirect to admin with trailing slash to ensure proper loading
+      window.location.href = '/admin/';
+      return;
+    }
+  }, []);
 
   return (
     <div style={{

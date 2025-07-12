@@ -1,7 +1,7 @@
 .header {
   position: sticky;
   top: 0;
-  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  /* background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7)); */
   transition: box-shadow 150ms ease;
   z-index: 10;
 
@@ -11,20 +11,20 @@
     left: 0;
     right: 0;
     bottom: 0;
-    border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
+    /* border-bottom: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3)); */
   }
 }
 
-.scrolled {
-  box-shadow: var(--mantine-shadow-sm);
-}
-
 .headerCell {
-  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6)) !important;
-  color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-dark-0)) !important;
+  /* background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6)) !important; */
+  /* color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-dark-0)) !important; */
   font-weight: 600 !important;
-  border-bottom: 2px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4)) !important;
+  /* border-bottom: 2px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4)) !important; */
   position: sticky;
   top: 0;
   z-index: 11;
+}
+
+.table{
+  scroll-behavior: smooth;
 }

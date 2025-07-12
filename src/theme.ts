@@ -41,13 +41,8 @@ export const theme = createTheme({
     Table: {
       styles: {
         th: {
-          backgroundColor: 'var(--mantine-color-gray-0)',
-          borderBottom: '1px solid var(--mantine-color-gray-3)',
-          
-          '@media (prefers-color-scheme: dark)': {
-            backgroundColor: 'var(--mantine-color-dark-6)',
-            borderBottom: '1px solid var(--mantine-color-dark-4)',
-          },
+          backgroundColor: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))',
+          borderBottom: 'light-dark(1px solid var(--mantine-color-gray-3), 1px solid var(--mantine-color-dark-4))',
         },
       },
     },
