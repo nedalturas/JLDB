@@ -388,7 +388,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
 
 
         <ScrollArea h={500} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-          <Table miw={700} highlightOnHover stickyHeader mb="md" mt="xl">
+          <Table miw={700} highlightOnHover stickyHeader mb="md"  className={classes.table}>
             <Table.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
               <Table.Tr>
                 <Table.Th className={classes.headerCell}>Company Name</Table.Th>

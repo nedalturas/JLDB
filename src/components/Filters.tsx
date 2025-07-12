@@ -102,7 +102,7 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
 
   return (
     <Container>
-      <Group gap="md" grow>
+      <Group gap="md" grow mb="md">
         <Select
           label="City Coverage"
           placeholder="Select city"
