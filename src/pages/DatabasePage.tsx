@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import Filters from "../components/Filters";
+import DynamicFilters from "../components/DynamicFilters";
 import ResultsTable from "../components/ResultsTable";
 
 function DatabasePage() {
@@ -25,6 +26,7 @@ function DatabasePage() {
   return (
     <>
       <Filters data={sheetData} onFilterChange={handleFilterChange} />
+      <DynamicFilters data={sheetData} onFilterChange={handleFilterChange} />
       <ResultsTable filters={filters} onDataLoad={handleDataLoad} />
     </>
   );
