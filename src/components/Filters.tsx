@@ -16,6 +16,8 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
   const [city, setCity] = useState('');
   const [service, setService] = useState('');
   const [search, setSearch] = useState('');
+  const [citySearchValue, setCitySearchValue] = useState('');
+  const [serviceSearchValue, setServiceSearchValue] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Add hotkey for Ctrl+K to focus search
@@ -105,7 +107,14 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           searchable
           clearable
           value={city}
-          onChange={(value) => setCity(value || '')}
+          searchValue={citySearchValue}
+          onSearchChange={setCitySearchValue}
+          onChange={(value) => {
+            setCity(value || '');
+            setCitySearchValue(''); // Clear search when selection changes
+          }}
+          onDropdownOpen={() => setCitySearchValue('')} // Clear search when dropdown opens
+          comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
         />
         <Select
           label="Service Type"
@@ -114,7 +123,15 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           searchable
           clearable
           value={service}
-          onChange={(value) => setService(value || '')}
+          searchValue={serviceSearchValue}
+          onSearchChange={setServiceSearchValue}
+          allowDeselect={true}
+          onChange={(value) => {
+            setService(value || '');
+            setServiceSearchValue(''); // Clear search when selection changes
+          }}
+          onDropdownOpen={() => setServiceSearchValue('')} // Clear search when dropdown opens
+          comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
         />
         <Tooltip
           label={
@@ -133,11 +150,9 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
             ref={searchInputRef}
             label="Search"
             placeholder="Search company names... or ctrl + k"
-           
             value={search}
             onChange={(event) => setSearch(event.currentTarget.value)}
             leftSection={<IconSearch size={16} />}
-          
           />
         </Tooltip>
       </Group>

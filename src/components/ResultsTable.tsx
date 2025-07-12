@@ -391,7 +391,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
             data={['5', '10', '25', '50', '100']}
             value={rowsPerPage.toString()}
             onChange={(value) => setRowsPerPage(Number(value))}
-            w={150}
+          comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
+            w={100}
           />
         </Group>
 
