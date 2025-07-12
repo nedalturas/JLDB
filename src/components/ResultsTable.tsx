@@ -190,7 +190,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
   if (loading) {
     return (
       <Container>
-        <Group justify="center" align='center' p="xl">
+        <Group justify="center" align='center' p="xl" h={'500px'}>
           <Loader size="lg" />
           <Text>Loading data...</Text>
         </Group>
@@ -397,7 +397,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         </Group>
 
         <ScrollArea h={500} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-          <Table miw={700} highlightOnHover withTableBorder stickyHeader>
+          <Table miw={700} highlightOnHover stickyHeader mb="md">
             <Table.Thead className={cx(classes.header, {[classes.scrolled]: scrolled})}>
               <Table.Tr>
                 <Table.Th className={classes.headerCell}>Company Name</Table.Th>
@@ -443,7 +443,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           </Table>
         </ScrollArea>
 
-        <Group justify="center" mt="md">
+        <Group justify="center"  mb="md">
           <Pagination
             value={currentPage}
             onChange={setCurrentPage}

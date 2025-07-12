@@ -18,6 +18,9 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
   const [search, setSearch] = useState('');
   const [citySearchValue, setCitySearchValue] = useState('');
   const [serviceSearchValue, setServiceSearchValue] = useState('');
+  const [isCityFocused, setIsCityFocused] = useState(false);
+  const [isServiceFocused, setIsServiceFocused] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Add hotkey for Ctrl+K to focus search
@@ -106,6 +109,7 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           data={cities}
           searchable
           clearable
+          variant={isCityFocused ? 'default' : 'filled'}
           value={city}
           searchValue={citySearchValue}
           onSearchChange={setCitySearchValue}
@@ -113,7 +117,11 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
             setCity(value || '');
             setCitySearchValue(''); // Clear search when selection changes
           }}
-          onDropdownOpen={() => setCitySearchValue('')} // Clear search when dropdown opens
+          onDropdownOpen={() => {
+            setCitySearchValue(''); // Clear search when dropdown opens
+            setIsCityFocused(true); // Set focused state
+          }}
+          onDropdownClose={() => setIsCityFocused(false)} // Reset focused state
           comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
         />
         <Select
@@ -122,6 +130,7 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
           data={services}
           searchable
           clearable
+          variant={isServiceFocused ? 'default' : 'filled'}
           value={service}
           searchValue={serviceSearchValue}
           onSearchChange={setServiceSearchValue}
@@ -130,7 +139,11 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
             setService(value || '');
             setServiceSearchValue(''); // Clear search when selection changes
           }}
-          onDropdownOpen={() => setServiceSearchValue('')} // Clear search when dropdown opens
+          onDropdownOpen={() => {
+            setServiceSearchValue(''); // Clear search when dropdown opens
+            setIsServiceFocused(true); // Set focused state
+          }}
+          onDropdownClose={() => setIsServiceFocused(false)} // Reset focused state
           comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
         />
         <Tooltip
@@ -151,7 +164,12 @@ function Filters({ data = [], onFilterChange }: FilterProps) {
             label="Search"
             placeholder="Search company names... or ctrl + k"
             value={search}
-            onChange={(event) => setSearch(event.currentTarget.value)}
+            variant={isSearchFocused ? 'default' : 'filled'}
+            onChange={(event) => 
+              setSearch(event.currentTarget.value)
+            }
+            onClick={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
             leftSection={<IconSearch size={16} />}
           />
         </Tooltip>
