@@ -17,12 +17,13 @@ import {
   ActionIcon,
   Tooltip,
   Box,
+  Flex
 } from '@mantine/core';
 import cx from 'clsx';
 import classes from './ResultsTable.module.css';
-import { 
-  IconEye, 
-  IconBrandWhatsapp, 
+import {
+  IconEye,
+  IconBrandWhatsapp,
   IconBuilding,
   IconMapPin,
   IconTool,
@@ -119,13 +120,13 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
     }
 
     const processedData: FilteredData[] = data.map((row) => {
-      const cityNames: (keyof Pick<SheetData, 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Al Ain'>)[] = 
+      const cityNames: (keyof Pick<SheetData, 'Dubai' | 'Abu Dhabi' | 'Sharjah' | 'Ajman' | 'Al Ain'>)[] =
         ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Al Ain'];
-      
-      const cities = cityNames.filter(city => 
+
+      const cities = cityNames.filter(city =>
         row[city] === 'TRUE' || row[city] === true
       );
-    
+
       return {
         companyName: row['Company Name'] || 'N/A',
         citysCoverage: cities,
@@ -238,7 +239,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         >
           {selectedRow && (
             <Stack gap="lg">
-             
+
               <Box>
                 <Group gap="sm" mb="sm">
                   <IconBuilding size={20} color='var(--mantine-color-primary-6)' />
@@ -359,7 +360,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                       >
                         Open Chat
                       </Button>
-                      <Tooltip 
+                      <Tooltip
                         label={clipboard.copied ? 'Copied!' : 'Copy WhatsApp link'}
                         position="top"
                         withArrow
@@ -385,20 +386,10 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           )}
         </Modal>
 
-        <Group justify="space-between" mb="md">
-          <Select
-            label="Rows per page"
-            data={['5', '10', '25', '50', '100']}
-            value={rowsPerPage.toString()}
-            onChange={(value) => setRowsPerPage(Number(value))}
-          comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
-            w={100}
-          />
-        </Group>
 
         <ScrollArea h={500} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-          <Table miw={700} highlightOnHover stickyHeader mb="md">
-            <Table.Thead className={cx(classes.header, {[classes.scrolled]: scrolled})}>
+          <Table miw={700} highlightOnHover stickyHeader mb="md" mt="xl">
+            <Table.Thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
               <Table.Tr>
                 <Table.Th className={classes.headerCell}>Company Name</Table.Th>
                 <Table.Th className={classes.headerCell}>City Coverage</Table.Th>
@@ -425,7 +416,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                   <Table.Td>
                     <Button.Group>
                       <Button size="compact-xs" onClick={() => handleView(row)}>
-                        <IconEye stroke={1.5} size={18} color='black'/>
+                        <IconEye stroke={1.5} size={18} color='black' />
                       </Button>
                       <Button
                         size="compact-xs"
@@ -433,7 +424,7 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
                         onClick={() => handleChat(row)}
                         disabled={!row.whatsapp}
                       >
-                        <IconBrandWhatsapp stroke={1.5} size={18} color=' var(--mantine-color-primary-filled)'/>
+                        <IconBrandWhatsapp stroke={1.5} size={18} color=' var(--mantine-color-primary-filled)' />
                       </Button>
                     </Button.Group>
                   </Table.Td>
@@ -443,12 +434,28 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
           </Table>
         </ScrollArea>
 
-        <Group justify="center"  mb="md">
+        <Group justify="space-between" mb="md" mt="md">
           <Pagination
             value={currentPage}
             onChange={setCurrentPage}
             total={totalPages}
           />
+
+          <Stack>
+            <Flex align="center" gap="xs">
+              <label htmlFor="rowsPerPage">Per page</label>
+              <Select
+                id="rowsPerPage"
+                data={['5', '10', '25', '50', '100']}
+                value={rowsPerPage.toString()}
+                onChange={(value) => setRowsPerPage(Number(value))}
+                comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }}
+                w={100}
+                maxDropdownHeight={100}
+              />
+            </Flex>
+          </Stack>
+
         </Group>
       </Container>
     </>
