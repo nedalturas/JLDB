@@ -2,11 +2,15 @@ import "@mantine/core/styles.css";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { theme } from "./theme";
+
 import { HeaderSimple } from "./components/HeaderSimple";
 import { Footer } from "./components/Footer";
+import NotFound from "./components/NotFound";
+
 import DatabasePage from "./pages/DatabasePage";
 import DocsPage from "./pages/DocsPage";
-import NotFound from "./components/NotFound";
+import Tools from "./pages/Tools";
+
 import { usePageTitle } from "./hooks/usePageTitle";
 import { useEffect } from "react";
 
@@ -33,6 +37,8 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<DatabasePage />} />
           <Route path="/docs" element={<DocsPage />} />
+          <Route path="/tools" element={<Tools />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
