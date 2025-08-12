@@ -17,6 +17,12 @@ interface ToolsSidebarProps {
 
 const tools: Tool[] = [
   {
+    id: 'callback-timer',
+    title: 'Callback Timer',
+    category: 'Utilities',
+    description: 'Set reminders for customer callbacks'
+  },
+  {
     id: 'calculator',
     title: 'Service Calculator',
     category: 'Utilities',

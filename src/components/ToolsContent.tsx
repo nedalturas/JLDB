@@ -1,5 +1,6 @@
 import { Container, Text, Alert, Stack, Title, Card, Group, Badge } from '@mantine/core';
 import { IconTool, IconCalculator, IconQrcode, IconLink, IconFileText, IconMarkdown, IconColorPicker, IconPhoto } from '@tabler/icons-react';
+import { CallbackTimer } from './CallbackTimer';
 
 interface ToolsContentProps {
   activeSection: string;
@@ -17,6 +18,11 @@ const toolIcons: Record<string, React.ReactNode> = {
 };
 
 const toolContent: Record<string, { title: string; description: string; content: React.ReactNode }> = {
+  'callback-timer': {
+    title: 'Callback Timer',
+    description: 'Set reminders for customer callbacks with audio notifications',
+    content: <CallbackTimer />
+  },
   calculator: {
     title: 'Service Calculator',
     description: 'Calculate service costs and estimates',

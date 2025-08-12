@@ -4,7 +4,7 @@ import { ToolsSidebar } from '../components/ToolsSidebar';
 import { ToolsContent } from '../components/ToolsContent';
 
 function Tools() {
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState('callback-timer');
 
   return (
     <Container size="xl" py="xl">

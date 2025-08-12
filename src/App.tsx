@@ -1,5 +1,7 @@
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { theme } from "./theme";
 
@@ -52,6 +54,7 @@ export default function App() {
     <>
       <ColorSchemeScript defaultColorScheme="auto" />
       <MantineProvider theme={theme} defaultColorScheme="auto">
+        <Notifications />
         <Router>
           <AppContent />
         </Router>
