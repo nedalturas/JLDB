@@ -1,0 +1,143 @@
+.sidebar {
+  position: sticky;
+  top: 40px;
+  height: fit-content;
+  min-width: 250px;
+}
+
+.tocHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tocIcon {
+  opacity: 0.7;
+}
+
+.categorySection {
+  margin-bottom: 24px;
+}
+
+.categoryTitle {
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--mantine-color-primary-filled);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.navLink {
+  display: block;
+  padding: 8px 16px;
+  margin: 2px 0;
+  border-radius: var(--mantine-radius-sm);
+  font-weight: 400;
+  font-size: 14px;
+  color: light-dark(var(--mantine-color-dark-8), var(--mantine-color-gray-2));
+  text-decoration: none;
+  transition: all 0.15s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
+}
+
+.navLink[data-active] {
+  background-color: var(--mantine-color-primary-filled);
+  color: var(--mantine-color-white);
+  font-weight: 500;
+}
+
+.navLink[data-active]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--mantine-color-primary-filled);
+}
+
+.mobileMenuButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-radius: var(--mantine-radius-sm);
+  background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobileMenuButton:hover {
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  border-color: light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+}
+
+.drawerContent {
+  padding: 0;
+}
+
+.drawerNavLink {
+  display: block;
+  padding: 12px 16px;
+  margin: 2px 0;
+  border-radius: var(--mantine-radius-sm);
+  font-weight: 400;
+  font-size: 14px;
+  color: light-dark(var(--mantine-color-dark-8), var(--mantine-color-gray-1));
+  text-decoration: none;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.drawerNavLink:hover {
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-dark-9), var(--mantine-color-gray-0));
+}
+
+.drawerNavLink[data-active] {
+  background-color: var(--mantine-color-primary-filled);
+  color: var(--mantine-color-white);
+  font-weight: 500;
+}
+
+.drawerCategoryTitle {
+  padding: 12px 16px 8px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--mantine-color-primary-filled);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  margin-top: 16px;
+}
+
+.drawerCategoryTitle:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    min-width: auto;
+    width: 100%;
+  }
+}

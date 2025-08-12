@@ -16,6 +16,10 @@ const pageConfig: PageTitleConfig = {
   '/docs': {
     title: 'Documentation',
     description: 'Complete guide to using JLDB platform. Learn how to search, filter, and connect with service providers effectively.'
+  },
+  '/tools': {
+    title: 'Tools',
+    description: 'Useful tools and utilities for service providers and teams. Calculate costs, generate QR codes, and more.'
   }
 };
 
