@@ -400,11 +400,11 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
             </Table.Thead>
             <Table.Tbody>
               {pageData.map((row, idx) => (
-                <Table.Tr key={idx + startIndex}>
+                <Table.Tr key={idx + startIndex} bg={row.status.toLowerCase() === 'active' ? 'transparent' : 'rgba(250,82,82, 0.3)'}>
                   <Table.Td>{row.companyName}</Table.Td>
                   <Table.Td>{row.citysCoverage.join(', ') || 'N/A'}</Table.Td>
                   <Table.Td>{row.serviceType}</Table.Td>
-                  <Table.Td>
+                  <Table.Td >
                     <Badge
                       variant="dot"
                       size='xs'

@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
-import "@mantine/notifications/styles.css";
+// import "@mantine/notifications/styles.css";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import { Notifications } from "@mantine/notifications";
+// import { Notifications } from "@mantine/notifications";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { theme } from "./theme";
 
@@ -11,7 +11,6 @@ import NotFound from "./components/NotFound";
 
 import DatabasePage from "./pages/DatabasePage";
 import DocsPage from "./pages/DocsPage";
-import Tools from "./pages/Tools";
 
 import { usePageTitle } from "./hooks/usePageTitle";
 import { useEffect } from "react";
@@ -39,7 +38,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<DatabasePage />} />
           <Route path="/docs" element={<DocsPage />} />
-          <Route path="/tools" element={<Tools />} />
+          {/* <Route path="/tools" element={<Tools />} /> */}
 
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -54,7 +53,7 @@ export default function App() {
     <>
       <ColorSchemeScript defaultColorScheme="auto" />
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <Notifications />
+        {/* <Notifications /> */}
         <Router>
           <AppContent />
         </Router>
