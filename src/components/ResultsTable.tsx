@@ -439,12 +439,14 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
             value={currentPage}
             onChange={setCurrentPage}
             total={totalPages}
+            size='xs'
           />
 
           <Stack>
             <Flex align="center" gap="xs">
               <label htmlFor="rowsPerPage">Per page</label>
               <Select
+              size='xs'
                 id="rowsPerPage"
                 data={['5', '10', '25', '50', '100']}
                 value={rowsPerPage.toString()}
