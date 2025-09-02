@@ -14,6 +14,8 @@
     "@mantine/hooks": "8.2.1",
     "@tabler/icons-react": "^3.34.0",
     "clsx": "^2.1.1",
+    "firebase": "^12.2.1",
+    "firebase-tools": "^14.15.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^9.0.1",

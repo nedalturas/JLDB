@@ -3,8 +3,8 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import { Paper, Code, Title, Text, List, Table, Blockquote, Divider, useMantineColorScheme, Image } from '@mantine/core';
-import 'highlight.js/styles/github.css';
-import 'highlight.js/styles/github-dark.css';
+// import 'highlight.js/styles/github.css';
+// import 'highlight.js/styles/github-dark.css';
 
 interface MarkdownRendererProps {
   content: string;
