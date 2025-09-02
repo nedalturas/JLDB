@@ -89,7 +89,8 @@ function ResultsTable({ filters, onDataLoad }: ResultsTableProps) {
         setError(null);
 
         const response = await fetch(
-          `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`
+          // `https://opensheet.vercel.app/${SHEET_ID}/${SHEET_NAME}`
+          `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NAME}`
         );
 
         if (!response.ok) {
