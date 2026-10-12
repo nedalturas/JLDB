@@ -10,7 +10,7 @@ export function Footer() {
 
         <div className={classes.bottomSection}>
           <Text className={classes.copyright}>
-            © {currentYear} JLDB. All rights reserved. <Anchor href="http://httpwanderer.dev" target="_blank" color="inherit">httpwanderer.dev</Anchor>
+            © {currentYear} JLDB. All rights reserved. <Anchor href="https://nedalturas.github.io/anti-claim/" target="_blank" color="inherit">ned.dev</Anchor>
           </Text>
          
         </div>
