@@ -1,160 +1,194 @@
-import { Paper, Button, Drawer, Text } from '@mantine/core';
-import { useMediaQuery, useDisclosure } from '@mantine/hooks';
-import { IconMenu2, IconBook, IconList } from '@tabler/icons-react';
-import { useMarkdownDocs } from '../hooks/useMarkdownDocs';
+import { useState, useMemo } from 'react';
+import {
+  Text,
+  TextInput,
+  Badge,
+  ActionIcon,
+  Button,
+  Loader,
+  Stack,
+  Tooltip,
+} from '@mantine/core';
+import {
+  IconSearch,
+  IconX,
+  IconList,
+  IconChevronRight,
+  IconArticleOff,
+} from '@tabler/icons-react';
+import { useMarkdownDocs, DocArticle } from '../hooks/useMarkdownDocs';
+import { getArticleIcon, getCategoryIcon } from '../utils/docsIcons';
 import classes from './DocsSidebar.module.css';
 
 interface DocsSidebarProps {
+  articles?: DocArticle[];
+  loading?: boolean;
   activeSection: string;
   onSectionChange: (sectionId: string) => void;
 }
 
-export function DocsSidebar({ activeSection, onSectionChange }: DocsSidebarProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const [opened, { open, close }] = useDisclosure(false);
-  const { articles, loading } = useMarkdownDocs();
+export function DocsSidebar({
+  articles: propArticles,
+  loading: propLoading,
+  activeSection,
+  onSectionChange,
+}: DocsSidebarProps) {
+  const fallbackDocs = useMarkdownDocs();
+  const articles = propArticles ?? fallbackDocs.articles;
+  const loading = propLoading ?? fallbackDocs.loading;
 
-  // Group articles by category
-  const groupedArticles = articles.reduce((acc, article) => {
-    const category = article.category || 'General';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(article);
-    return acc;
-  }, {} as Record<string, typeof articles>);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Get current article title for mobile button
-  const currentArticle = articles.find(article => article.id === activeSection);
-
-  const handleSectionChange = (sectionId: string) => {
-    onSectionChange(sectionId);
-    if (isMobile) {
-      close();
-    }
-  };
-
-  const renderDesktopMenu = () => {
-    if (loading) {
-      return (
-        <div style={{ padding: '16px' }}>
-          <Text size="sm" c="dimmed">Loading menu...</Text>
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        <div className={classes.tocHeader}>
-          <IconList size={16} className={classes.tocIcon} />
-          Table of contents
-        </div>
-        
-        {Object.entries(groupedArticles).map(([category, categoryArticles]) => (
-          <div key={category} className={classes.categorySection}>
-            {Object.keys(groupedArticles).length > 1 && (
-              <div className={classes.categoryTitle}>
-                {category}
-              </div>
-            )}
-            {categoryArticles.map((article) => (
-              <a
-                key={article.id}
-                href="#"
-                className={classes.navLink}
-                data-active={activeSection === article.id || undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSectionChange(article.id);
-                }}
-              >
-                {article.title}
-              </a>
-            ))}
-          </div>
-        ))}
-      </div>
+  // Filter articles by search query
+  const filteredArticles = useMemo(() => {
+    if (!searchQuery.trim()) return articles;
+    const query = searchQuery.toLowerCase().trim();
+    return articles.filter(
+      (article) =>
+        article.title.toLowerCase().includes(query) ||
+        (article.category && article.category.toLowerCase().includes(query)) ||
+        article.id.toLowerCase().includes(query)
     );
+  }, [articles, searchQuery]);
+
+  // Group filtered articles by category
+  const groupedArticles = useMemo(() => {
+    return filteredArticles.reduce((acc, article) => {
+      const category = article.category || 'General';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(article);
+      return acc;
+    }, {} as Record<string, DocArticle[]>);
+  }, [filteredArticles]);
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
   };
 
-  const renderMobileMenu = () => {
-    if (loading) {
-      return (
-        <div style={{ padding: '16px' }}>
-          <Text size="sm" c="dimmed">Loading menu...</Text>
-        </div>
-      );
-    }
-
+  if (loading) {
     return (
-      <div className={classes.drawerContent}>
-        {Object.entries(groupedArticles).map(([category, categoryArticles]) => (
-          <div key={category}>
-            {Object.keys(groupedArticles).length > 1 && (
-              <div className={classes.drawerCategoryTitle}>
-                {category}
-              </div>
-            )}
-            {categoryArticles.map((article) => (
-              <a
-                key={article.id}
-                href="#"
-                className={classes.drawerNavLink}
-                data-active={activeSection === article.id || undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSectionChange(article.id);
-                }}
-              >
-                {article.title}
-              </a>
-            ))}
+      <div className={classes.sidebarCard}>
+        <div className={classes.sidebarHeader}>
+          <div className={classes.headerTitleRow}>
+            <span className={classes.headerTitle}>
+              <IconList size={16} className={classes.headerIcon} />
+              Documentation
+            </span>
           </div>
-        ))}
+        </div>
+        <Stack align="center" justify="center" py="xl" gap="sm">
+          <Loader size="sm" />
+          <Text size="xs" c="dimmed">
+            Loading articles...
+          </Text>
+        </Stack>
       </div>
-    );
-  };
-
-  if (isMobile) {
-    return (
-      <>
-        <Paper shadow="sm" p="md" mb="xl" radius="md">
-          <Button
-            variant="light"
-            leftSection={<IconMenu2 size={18} />}
-            onClick={open}
-            fullWidth
-            justify="space-between"
-            rightSection={<IconBook size={16} />}
-          >
-            <Text truncate>
-              {currentArticle ? currentArticle.title : 'Select Documentation'}
-            </Text>
-          </Button>
-        </Paper>
-
-        <Drawer
-          opened={opened}
-          onClose={close}
-          title={
-            <div className={classes.tocHeader}>
-              <IconList size={16} className={classes.tocIcon} />
-              Table of contents
-            </div>
-          }
-          size="sm"
-          position="left"
-          zIndex={1000000}
-        >
-          {renderMobileMenu()}
-        </Drawer>
-      </>
     );
   }
 
+  const categoryEntries = Object.entries(groupedArticles);
+  const totalCount = articles.length;
+
   return (
-    <Paper shadow="sm" radius="md" className={classes.sidebar}>
-      {renderDesktopMenu()}
-    </Paper>
+    <nav className={classes.sidebarCard} aria-label="Documentation navigation">
+      <div className={classes.sidebarHeader}>
+        <div className={classes.headerTitleRow}>
+          <span className={classes.headerTitle}>
+            <IconList size={16} className={classes.headerIcon} />
+            Documentation
+          </span>
+          <Badge size="sm" variant="light" color="primary" radius="sm">
+            {totalCount} {totalCount === 1 ? 'doc' : 'docs'}
+          </Badge>
+        </div>
+
+        <div className={classes.searchWrapper}>
+          <TextInput
+            placeholder="Search docs..."
+            size="xs"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+            leftSection={<IconSearch size={14} stroke={1.8} />}
+            rightSection={
+              searchQuery ? (
+                <ActionIcon
+                  size="xs"
+                  variant="subtle"
+                  color="gray"
+                  onClick={handleClearSearch}
+                  aria-label="Clear search"
+                >
+                  <IconX size={12} />
+                </ActionIcon>
+              ) : null
+            }
+          />
+        </div>
+      </div>
+
+      <div className={classes.scrollArea}>
+        {categoryEntries.length === 0 ? (
+          <div className={classes.emptySearch}>
+            <IconArticleOff size={28} stroke={1.5} opacity={0.6} />
+            <Text size="xs" fw={500}>
+              No docs match "{searchQuery}"
+            </Text>
+            <Button
+              size="compact-xs"
+              variant="subtle"
+              color="primary"
+              onClick={handleClearSearch}
+            >
+              Clear filter
+            </Button>
+          </div>
+        ) : (
+          categoryEntries.map(([category, categoryArticles]) => (
+            <div key={category} className={classes.categorySection}>
+              <div className={classes.categoryHeader}>
+                <span className={classes.categoryLabel}>
+                  <span className={classes.categoryIcon}>
+                    {getCategoryIcon(category, 13)}
+                  </span>
+                  {category}
+                </span>
+                <Badge size="xs" variant="outline" color="gray" radius="xl">
+                  {categoryArticles.length}
+                </Badge>
+              </div>
+
+              {categoryArticles.map((article) => {
+                const isActive = activeSection === article.id;
+                return (
+                  <button
+                    key={article.id}
+                    type="button"
+                    className={classes.navItem}
+                    data-active={isActive ? 'true' : undefined}
+                    onClick={() => onSectionChange(article.id)}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {isActive && <span className={classes.activeIndicator} />}
+                    <span className={classes.navItemIcon}>
+                      {getArticleIcon(article.id, article.category, 15)}
+                    </span>
+                    <span className={classes.navItemText}>
+                      {article.title}
+                    </span>
+                    {isActive && (
+                      <Tooltip label="Current article" position="right" withArrow>
+                        <IconChevronRight size={14} style={{ opacity: 0.7 }} />
+                      </Tooltip>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))
+        )}
+      </div>
+    </nav>
   );
 }
